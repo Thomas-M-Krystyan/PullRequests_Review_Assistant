@@ -4,7 +4,10 @@ namespace PullRequests_Review_Assistant.Domain.ValueObjects
 {
     /// <summary>
     /// Immutable configuration snapshot produced by the builder.
+    ///
+    /// <para>
     /// Captures every parameter needed to execute a code review session.
+    /// </para>
     /// </summary>
     public sealed record ReviewConfiguration
     {
