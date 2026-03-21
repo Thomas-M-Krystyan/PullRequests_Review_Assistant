@@ -12,6 +12,7 @@ namespace PullRequests_Review_Assistant.Domain.Enums
         // ------------------------------
         // CORE (included in base review)
         // ------------------------------
+
         Performance          = 1 << 0,
         Architecture         = 1 << 1,
         Vulnerabilities      = 1 << 2,
@@ -20,6 +21,7 @@ namespace PullRequests_Review_Assistant.Domain.Enums
         // ----------------------------
         // EXTRA (optional via builder)
         // ----------------------------
+
         CodeFormatting       = 1 << 4,
         Linting              = 1 << 5,
         Copyrights           = 1 << 6,
@@ -40,6 +42,7 @@ namespace PullRequests_Review_Assistant.Domain.Enums
         // --------------------------
         // GROUPINGS (combined areas)
         // --------------------------
+
         /// <summary>
         /// Shorthand for the four core review areas.
         /// </summary>
