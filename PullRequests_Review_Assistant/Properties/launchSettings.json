@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "PullRequests_Review_Assistant": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
