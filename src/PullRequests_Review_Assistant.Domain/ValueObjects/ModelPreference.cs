@@ -8,7 +8,7 @@ namespace PullRequests_Review_Assistant.Domain.ValueObjects
     ///   Immutable value object used in model configuration.
     /// </para>
     /// </summary>
-    public sealed record ModelPreference
+    public sealed record ModelPreference  // TODO: Rename to "PreferredModel"
     {
         /// <summary>
         /// The primary model identifier (e.g., "claude-opus-4.6", "gemini-3.1-pro").
