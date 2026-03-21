@@ -2,6 +2,7 @@ using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol;
 using PullRequests_Review_Assistant.Domain.Entities;
 using PullRequests_Review_Assistant.Domain.Interfaces;
+using PullRequests_Review_Assistant.Infrastructure.Extensions;
 
 namespace PullRequests_Review_Assistant.Infrastructure.Platform
 {
@@ -11,7 +12,9 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
     /// </summary>
     public sealed class GitHubPlatformService : IRepositoryPlatformService, IAsyncDisposable
     {
-        private IMcpClient? _mcpClient;
+        private const string PlatformName = "GitHub";
+
+        private IMcpClient? _mcpClient;  // TODO: Extract to parent
 
         /// <summary>
         /// Initializes the MCP client connected to the GitHub MCP server.
@@ -21,17 +24,13 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
         {
             _mcpClient = await McpClientFactory.CreateAsync(
                 // The transport layer defines how the client communicates with the server
-                new StdioClientTransport(new StdioClientTransportOptions
-                {
-                    Name = "GitHubMCP",
-                    Command = "npx",
-                    Arguments = ["-y", "@modelcontextprotocol/server-github"],
-                }),
-                // Optionally, client info can be specified for better logging and debugging on the server side
-                new McpClientOptions
-                {
-                    ClientInfo = new Implementation { Name = "GitHubMCP", Version = "1.0.0" }
-                },
+                new StdioClientTransport(
+                    new StdioClientTransportOptions
+                    {
+                        Name = "GitHubMCP",
+                        Command = "npx",
+                        Arguments = ["-y", "@modelcontextprotocol/server-github"],
+                    }),
                 cancellationToken: cancellationToken);
         }
 
@@ -56,7 +55,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
                     {
                         FilePath = content.Text,
                         DiffContent = content.Text,
-                        Language = InferLanguage(content.Text)
+                        Language = content.Text.InferLanguage()
                     }));
 
             return files;
@@ -89,11 +88,14 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
         }
 
         /// <inheritdoc />
-        public async ValueTask DisposeAsync()
+        public async ValueTask DisposeAsync()  // TODO: Extract to parent
         {
             if (_mcpClient is not null)
             {
                 await _mcpClient.DisposeAsync();
+                
+                // Clear reference after disposal (prevents ObjectDisposedException on subsequent calls)
+                _mcpClient = null;
             }
         }
 
@@ -101,115 +103,12 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
         /// Ensures the MCP client is initialized before making API calls.
         /// </summary>
         /// <exception cref="InvalidOperationException"/>
-        private void EnsureInitialized()
+        private void EnsureInitialized()  // TODO: Extract to parent
         {
             if (_mcpClient is null)
             {
-                throw new InvalidOperationException("MCP client not initialized. Call InitializeAsync first.");
+                throw new InvalidOperationException($"{PlatformName} MCP client not initialized. Call {nameof(InitializeAsync)} first.");
             }
-        }
-
-        /// <summary>
-        /// Infers programming language from file extension for syntax highlighting in review comments.
-        /// </summary>
-        ///
-        /// <param name="filePath">The file path.</param>
-        ///
-        /// <returns>
-        /// A string representing the programming language, or empty if unknown.
-        /// </returns>
-        private static string InferLanguage(string? filePath)
-        {
-            if (filePath is null)
-            {
-                return string.Empty;
-            }
-
-            var fileExtension = Path.GetExtension(filePath).ToLowerInvariant();
-            return fileExtension switch
-            {
-                // Programming languages
-                ".cs"       => "C#",
-                ".vb"       => "VB.NET",
-                ".fs"       => "F#",
-                ".java"     => "Java",
-                ".kt"       => "Kotlin",
-                ".scala"    => "Scala",
-                ".go"       => "Go",
-                ".rs"       => "Rust",
-                ".c"        => "C",
-                ".h"        => "C Header",
-                ".cpp" or ".cc" or ".cxx" or ".hpp" => "C++",
-                ".m"        => "Objective-C",
-                ".mm"       => "Objective-C++",
-                ".swift"    => "Swift",
-                ".dart"     => "Dart",
-                ".php"      => "PHP",
-                ".rb"       => "Ruby",
-                ".r"        => "R",
-                ".jl"       => "Julia",
-
-                // Scripting languages
-                ".js"       => "JavaScript",
-                ".jsx"      => "JavaScript (React)",
-                ".ts"       => "TypeScript",
-                ".tsx"      => "TypeScript (React)",
-                ".py"       => "Python",
-                ".lua"      => "Lua",
-                ".sh"       => "Shell Script",
-                ".bash"     => "Bash",
-                ".zsh"      => "Z Shell",
-                ".ps1"      => "PowerShell",
-                ".bat"      => "Batch Script",
-                ".cmd"      => "Windows Command Script",
-
-                // Markups and stylesheets
-                ".html" or ".htm" => "HTML",
-                ".css"      => "CSS",
-                ".scss"     => "SCSS",
-                ".sass"     => "SASS",
-                ".less"     => "LESS",
-                ".xml"      => "XML",
-                ".xaml"     => "XAML",
-                ".md"       => "Markdown",
-                ".adoc"     => "AsciiDoc",
-                ".mustache" => "Mustache",
-                ".hbs"      => "Handlebars",
-
-                // Query languages
-                ".sql"      => "SQL",
-                ".graphql" or ".gql"  => "GraphQL",
-
-                // Data formats
-                ".json"     => "JSON",
-                ".jsonc"    => "JSON with Comments",
-                ".yaml" or ".yml" => "YAML",
-                ".toml"     => "TOML",
-                ".ini"      => "INI",
-
-                // DevOps / IaC
-                ".tf"       => "Terraform",
-                ".tfvars"   => "Terraform Variables",
-                ".dockerfile" or "dockerfile" => "Dockerfile",
-                ".env"      => "Environment Variables",
-                ".cfg"      => "Config File",
-
-                // Build systems
-                ".gradle"   => "Gradle",
-                ".groovy"   => "Groovy",
-                ".cmake"    => "CMake",
-                ".make" or "makefile" => "Makefile",
-
-                // Version control
-                ".gitignore" => "Git Ignore",
-                ".gitconfig" => "Git Config",
-                ".gitattributes" => "Git Attributes",
-
-                // Containerization
-                ".dockerignore" => "Docker Ignore",
-
-                _ => string.Empty
-            };
         }
     }
 }
