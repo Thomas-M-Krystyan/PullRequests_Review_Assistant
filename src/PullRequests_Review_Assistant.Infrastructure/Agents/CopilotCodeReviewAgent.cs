@@ -104,12 +104,31 @@ namespace PullRequests_Review_Assistant.Infrastructure.Agents
             await _copilotClient.DisposeAsync();
         }
 
+        /// <summary>
+        /// Builds the full system prompt for the agent.
+        /// </summary>
+        /// 
+        /// <param name="areas">The code review areas.</param>
+        /// 
+        /// <returns>
+        /// The full system prompt for the agent.
+        /// </returns>
         private static string BuildFullSystemPrompt(ReviewArea areas)
         {
             return SystemPromptTemplates.CoreReviewPrompt
                    + SystemPromptTemplates.BuildReviewAreasPrompt(areas);
         }
 
+        /// <summary>
+        /// Parses the agent's response into a list of <see cref="ReviewComment"/> objects.
+        /// </summary>
+        /// 
+        /// <param name="response">The agent's response.</param>
+        /// <param name="fallbackFilePath">The fallback file path for error reporting.</param>
+        /// 
+        /// <returns>
+        /// A list of review comments.
+        /// </returns>
         private static List<ReviewComment> ParseReviewComments(string response, string fallbackFilePath)
         {
             try
