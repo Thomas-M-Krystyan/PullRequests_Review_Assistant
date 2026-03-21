@@ -15,7 +15,7 @@ namespace PullRequests_Review_Assistant.Domain.Interfaces
         /// </summary>
         /// 
         /// <param name="requiresTwoFactor">Whether 2FA is required.</param>
-        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// 
         /// <returns>
         /// A valid access token string.

@@ -10,7 +10,7 @@ namespace PullRequests_Review_Assistant.Domain.Interfaces
         /// </summary>
         /// 
         /// <param name="secretName">The name of the secret to retrieve.</param>
-        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// 
         /// <returns>
         ///   The secret value.
