@@ -1,1 +1,1 @@
-# PullRequests_Review_Assistant
+# PR Review Assistant
