@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PullRequests_Review_Assista
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PullRequests_Review_Assistant.Infrastructure", "src\PullRequests_Review_Assistant.Infrastructure\PullRequests_Review_Assistant.Infrastructure.csproj", "{B60B45E5-6149-98AF-2EAA-2451204D1AC9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PullRequests_Review_Assistant.Console", "src\PullRequests_Review_Assistant.Console\PullRequests_Review_Assistant.Console.csproj", "{2F806027-3B4C-ED54-2DA7-35968D1085E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,10 @@ Global
 		{B60B45E5-6149-98AF-2EAA-2451204D1AC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B60B45E5-6149-98AF-2EAA-2451204D1AC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B60B45E5-6149-98AF-2EAA-2451204D1AC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F806027-3B4C-ED54-2DA7-35968D1085E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F806027-3B4C-ED54-2DA7-35968D1085E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F806027-3B4C-ED54-2DA7-35968D1085E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F806027-3B4C-ED54-2DA7-35968D1085E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

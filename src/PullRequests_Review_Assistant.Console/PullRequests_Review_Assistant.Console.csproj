@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>12.0</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PullRequests_Review_Assistant.Application\PullRequests_Review_Assistant.Application.csproj" />
+    <ProjectReference Include="..\PullRequests_Review_Assistant.Infrastructure\PullRequests_Review_Assistant.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="model-config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
