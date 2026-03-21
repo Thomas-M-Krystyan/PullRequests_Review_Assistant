@@ -81,9 +81,6 @@ desktop.ini
 .copilot-temp/
 copilot.*
 *.copilot
-# Generated or helper files from Copilot SDK (conservative patterns)
-**/*Copilot*.cs
-**/*Copilot*.json
 
 # Coverage / profiling outputs
 coverage/
