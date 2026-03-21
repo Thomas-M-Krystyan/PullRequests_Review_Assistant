@@ -119,6 +119,7 @@ namespace PullRequests_Review_Assistant.Application.Builders
         #endregion
 
         /// <inheritdoc />
+        /// <exception cref="ArgumentException"/>
         public ReviewConfiguration Build()
         {
             if (string.IsNullOrWhiteSpace(_owner))

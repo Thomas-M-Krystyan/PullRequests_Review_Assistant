@@ -92,6 +92,8 @@ namespace PullRequests_Review_Assistant.Application.Commands
         /// 
         /// <param name="input">The input.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
+        /// 
+        /// <exception cref="ArgumentException"/>
         private async Task HandleReviewCommandAsync(string input, CancellationToken cancellationToken)
         {
             try
@@ -169,6 +171,12 @@ namespace PullRequests_Review_Assistant.Application.Commands
             }
         }
 
+        /// <summary>
+        /// Handles the language command asynchronous.
+        /// </summary>
+        /// 
+        /// <param name="input">The input.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         private async Task HandleLanguageCommandAsync(string input, CancellationToken cancellationToken)
         {
             try
@@ -188,12 +196,15 @@ namespace PullRequests_Review_Assistant.Application.Commands
 
                 Console.WriteLine($"[Language] Code review agent updated with {language} standards.");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine($"[Error] {ex.Message}");
+                Console.WriteLine($"[Error] {exception.Message}");
             }
         }
 
+        /// <summary>
+        /// Prints the help menu with available commands and options.
+        /// </summary>
         private static void PrintHelp()
         {
             Console.OutputEncoding = Encoding.UTF8;  // Ensure proper rendering of box-drawing characters
