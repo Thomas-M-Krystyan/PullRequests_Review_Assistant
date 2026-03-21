@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.dockerignore = .dockerignore
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		LICENSE.txt = LICENSE.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PullRequests_Review_Assistant.Domain", "src\PullRequests_Review_Assistant.Domain\PullRequests_Review_Assistant.Domain.csproj", "{512372F7-1271-192B-5F53-C18D5E44FAE5}"
