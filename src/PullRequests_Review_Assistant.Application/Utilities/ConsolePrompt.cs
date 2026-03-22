@@ -1,11 +1,11 @@
 using NetConsole = System.Console;  // There is a name conflict between System.Console and PullRequests_Review_Assistant.Console namespace
 
-namespace PullRequests_Review_Assistant.Console.Utilities
+namespace PullRequests_Review_Assistant.Application.Utilities
 {
     /// <summary>
     /// Provides generic console prompt helpers for interactive enum selection.
     /// </summary>
-    internal static class ConsolePrompt
+    public static class ConsolePrompt
     {
         /// <summary>
         /// Attempts to parse a named command-line argument (e.g. <c>--tier=Pro</c>) as
@@ -26,7 +26,7 @@ namespace PullRequests_Review_Assistant.Console.Utilities
         /// The parsed <typeparamref name="TEnum"/> value, or <see langword="null"/> if the
         /// argument is absent or its value is not a recognised enum member.
         /// </returns>
-        internal static TEnum? ParseArg<TEnum>(string[] args, string prefix)
+        public static TEnum? ParseArg<TEnum>(string[] args, string prefix)
             where TEnum : struct, Enum
         {
             var prefixArgument = $"--{prefix}=";
@@ -65,7 +65,7 @@ namespace PullRequests_Review_Assistant.Console.Utilities
         /// <returns>
         /// The <typeparamref name="TEnum"/> value chosen by the user.
         /// </returns>
-        internal static TEnum PromptUserSelection<TEnum>(string label)
+        public static TEnum PromptUserSelection<TEnum>(string label)
             where TEnum : struct, Enum
         {
             var values = Enum.GetValues<TEnum>();

@@ -8,7 +8,7 @@ using PullRequests_Review_Assistant.Infrastructure.Configuration;
 using PullRequests_Review_Assistant.Infrastructure.Platform;
 using PullRequests_Review_Assistant.Infrastructure.Secrets;
 using System.Text;
-using PullRequests_Review_Assistant.Console.Utilities;
+using PullRequests_Review_Assistant.Application.Utilities;
 using NetConsole = System.Console;  // There is a name conflict between System.Console and PullRequests_Review_Assistant.Console namespace
 
 namespace PullRequests_Review_Assistant.Console

@@ -1,7 +1,7 @@
 namespace PullRequests_Review_Assistant.Infrastructure.Extensions
 {
     /// <summary>
-    /// String extensions.
+    /// The extension methods for <see cref="string"/> type.
     /// </summary>
     public static class StringExtensions
     {

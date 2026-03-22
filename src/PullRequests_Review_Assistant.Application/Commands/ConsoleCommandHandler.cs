@@ -1,5 +1,6 @@
 using PullRequests_Review_Assistant.Application.Builders;
 using PullRequests_Review_Assistant.Application.Services;
+using PullRequests_Review_Assistant.Application.Utilities;
 using PullRequests_Review_Assistant.Domain.Enums;
 using PullRequests_Review_Assistant.Domain.Interfaces;
 using System.Text;
@@ -118,7 +119,10 @@ namespace PullRequests_Review_Assistant.Application.Commands
                 var name = inputParts[3];
                 var pullRequestId = inputParts[4];
 
-                var platformType = Enum.Parse<PlatformType>(platform, ignoreCase: true);
+                // Use ConsolePrompt.ParseArg for platform parsing
+                var platformType = ConsolePrompt.ParseArg<PlatformType>([$"--platform={platform}"], "platform")
+                                   ?? throw new ArgumentException($"Invalid platform: {platform}");
+
                 reviewBuilder.ForPlatform(platformType)
                     .ForRepository(owner: owner, name: name)
                     .ForPullRequest(int.Parse(pullRequestId));
@@ -149,7 +153,7 @@ namespace PullRequests_Review_Assistant.Application.Commands
                         "--all"         => reviewBuilder.IncludeAll(),
 
                         // Language option
-                        _ when reviewOption.StartsWith("--lang=") => reviewBuilder.WithLanguage(reviewOption["--lang=".Length..]),  // Allow --lang=Python or --lang=Python 3.9
+                        _ when reviewOption.StartsWith("--lang=") => reviewBuilder.WithLanguage(reviewOption["--lang=".Length..]),
 
                         // Unrecognized option
                         _ => throw new ArgumentException($"Unknown option: {reviewOption}")
