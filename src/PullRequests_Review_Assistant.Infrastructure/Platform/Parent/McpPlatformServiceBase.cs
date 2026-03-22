@@ -8,14 +8,14 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform.Parent
     /// Base class for MCP-backed platform services.
     ///
     /// <para>
-    /// Owns the shared <see cref="IMcpClient"/> lifetime — initialization via
-    /// <see cref="SetMcpClient"/>, guarded access via <see cref="McpClient"/>,
+    /// Owns the shared <see cref="ModelContextProtocol.Client.McpClient"/> lifetime — initialization via
+    /// <see cref="SetMcpClient"/>, guarded access via <see cref="ModelContextProtocol.Client.McpClient"/>,
     /// and async teardown via <see cref="DisposeAsync"/>.
     /// </para>
     /// </summary>
     public abstract class McpPlatformServiceBase : IRepositoryPlatformService
     {
-        private IMcpClient? _mcpClient;
+        private McpClient? _mcpClient;
 
         /// <summary>
         /// Provides guarded access to the MCP client for use in subclass operations.
@@ -24,7 +24,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform.Parent
         /// <exception cref="InvalidOperationException">
         ///   Thrown if accessed before <see cref="SetMcpClient"/> has been called.
         /// </exception>
-        protected IMcpClient McpClient
+        protected McpClient McpClient
         {
             get
             {
@@ -39,7 +39,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform.Parent
         public abstract Task InitializeAsync(bool requiresTwoFactor = false, CancellationToken cancellationToken = default);
 
         /// <inheritdoc />
-        public abstract Task<IReadOnlyList<Domain.Entities.PullRequestFile>> GetPullRequestFilesAsync(
+        public abstract Task<IReadOnlyList<PullRequestFile>> GetPullRequestFilesAsync(
             string owner, string repo, int pullRequestId, CancellationToken cancellationToken = default);
 
         /// <inheritdoc />
@@ -54,7 +54,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform.Parent
         /// </summary>
         ///
         /// <param name="client">The initialised MCP client.</param>
-        protected void SetMcpClient(IMcpClient client)
+        protected void SetMcpClient(McpClient client)
         {
             _mcpClient = client;
         }
