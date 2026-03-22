@@ -9,7 +9,7 @@ namespace PullRequests_Review_Assistant.Domain.Interfaces
     /// Implemented per platform (GitHub, GitLab, Bitbucket) via MCP servers.
     /// </para>
     /// </summary>
-    public interface IRepositoryPlatformService
+    public interface IRepositoryPlatformService : IAsyncDisposable
     {
         /// <summary>
         /// Authenticates with the platform and starts the underlying MCP client.
