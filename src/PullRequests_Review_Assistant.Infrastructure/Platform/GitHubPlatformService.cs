@@ -32,14 +32,8 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
         {
             _authStrategy = authStrategy;
         }
-
-        /// <summary>
-        /// Resolves the GitHub token via the auth strategy, sets it as the environment
-        /// variable expected by the MCP server, then starts the MCP client.
-        /// </summary>
-        ///
-        /// <param name="requiresTwoFactor">Whether two-factor authentication is required.</param>
-        /// <param name="cancellationToken">Cancellation token.</param>
+        
+        /// <inheritdoc />
         public async Task InitializeAsync(bool requiresTwoFactor = false, CancellationToken cancellationToken = default)
         {
             var token = await _authStrategy.AuthenticateAsync(requiresTwoFactor, cancellationToken);

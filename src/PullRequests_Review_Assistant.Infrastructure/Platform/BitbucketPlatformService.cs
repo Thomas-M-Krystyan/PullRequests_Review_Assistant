@@ -34,14 +34,8 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
         {
             _authStrategy = authStrategy;
         }
-
-        /// <summary>
-        /// Resolves Bitbucket credentials via the auth strategy, sets the environment
-        /// variables expected by the MCP server, then starts the MCP client.
-        /// </summary>
-        /// 
-        /// <param name="requiresTwoFactor">Whether two-factor authentication is required.</param>
-        /// <param name="cancellationToken">Cancellation token.</param>
+        
+        /// <inheritdoc />
         /// <exception cref="ArgumentException"/>
         public async Task InitializeAsync(bool requiresTwoFactor = false, CancellationToken cancellationToken = default)
         {

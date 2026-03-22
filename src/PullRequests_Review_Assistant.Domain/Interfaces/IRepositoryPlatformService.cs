@@ -12,6 +12,15 @@ namespace PullRequests_Review_Assistant.Domain.Interfaces
     public interface IRepositoryPlatformService
     {
         /// <summary>
+        /// Authenticates with the platform and starts the underlying MCP client.
+        /// Must be called once before any other method on this service.
+        /// </summary>
+        ///
+        /// <param name="requiresTwoFactor">Whether two-factor authentication is required.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        public Task InitializeAsync(bool requiresTwoFactor = false, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Fetches all changed files in the pull request.
         /// </summary>
         /// 
