@@ -55,15 +55,15 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
             Environment.SetEnvironmentVariable(UsernameEnvVar, username);
             Environment.SetEnvironmentVariable(AppPasswordEnvVar, appPassword);
 
-            var mcpClient = await McpClientFactory.CreateAsync(
-                new StdioClientTransport(
-                    new StdioClientTransportOptions
-                    {
-                        Name = "BitbucketMCP",
-                        Command = "npx",
-                        Arguments = ["-y", "@modelcontextprotocol/server-bitbucket"],
-                    }),
-                cancellationToken: cancellationToken);
+            var transport = new StdioClientTransport(
+                new StdioClientTransportOptions
+                {
+                    Name = "BitbucketMCP",
+                    Command = "npx",
+                    Arguments = ["-y", "@modelcontextprotocol/server-bitbucket"],
+                });
+
+            var mcpClient = await McpClient.CreateAsync(transport, cancellationToken: cancellationToken);
 
             SetMcpClient(mcpClient);
         }

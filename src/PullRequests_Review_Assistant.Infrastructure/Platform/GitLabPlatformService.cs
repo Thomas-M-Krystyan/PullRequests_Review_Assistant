@@ -39,15 +39,15 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
             // The MCP GitLab server reads the token from this environment variable
             Environment.SetEnvironmentVariable(TokenEnvVar, token);
 
-            var mcpClient = await McpClientFactory.CreateAsync(
-                new StdioClientTransport(
-                    new StdioClientTransportOptions
-                    {
-                        Name = "GitLabMCP",
-                        Command = "npx",
-                        Arguments = ["-y", "@modelcontextprotocol/server-gitlab"],
-                    }),
-                cancellationToken: cancellationToken);
+            var transport = new StdioClientTransport(
+                new StdioClientTransportOptions
+                {
+                    Name = "GitLabMCP",
+                    Command = "npx",
+                    Arguments = ["-y", "@modelcontextprotocol/server-gitlab"],
+                });
+
+            var mcpClient = await McpClient.CreateAsync(transport, cancellationToken: cancellationToken);
 
             SetMcpClient(mcpClient);
         }

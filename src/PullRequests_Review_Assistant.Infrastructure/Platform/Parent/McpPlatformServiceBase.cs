@@ -29,7 +29,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform.Parent
             get
             {
                 EnsureInitialized();
-
+                
                 return _mcpClient!;
             }
         }

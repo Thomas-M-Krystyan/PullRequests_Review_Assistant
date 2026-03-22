@@ -39,16 +39,15 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
             // The MCP GitHub server reads the token from this environment variable
             Environment.SetEnvironmentVariable(TokenEnvVar, token);
 
-            var mcpClient = await McpClientFactory.CreateAsync(
-                // The transport layer defines how the client communicates with the server
-                new StdioClientTransport(
-                    new StdioClientTransportOptions
-                    {
-                        Name = "GitHubMCP",
-                        Command = "npx",
-                        Arguments = ["-y", "@modelcontextprotocol/server-github"],
-                    }),
-                cancellationToken: cancellationToken);
+            var transport = new StdioClientTransport(
+                new StdioClientTransportOptions
+                {
+                    Name = "GitHubMCP",
+                    Command = "npx",
+                    Arguments = ["-y", "@modelcontextprotocol/server-github"],
+                });
+
+            var mcpClient = await McpClient.CreateAsync(transport, cancellationToken: cancellationToken);
 
             SetMcpClient(mcpClient);
         }
