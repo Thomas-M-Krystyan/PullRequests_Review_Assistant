@@ -55,5 +55,7 @@ PullRequests_Review_Assistant.sln
 │   │       └── ModelConfigProvider.cs
 │   │
 │   └── PullRequests_Review_Assistant.Console/
+│       ├── Utilities/
+│       │   └── ConsolePrompt.cs
 │       └── Program.cs
 ```
