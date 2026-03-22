@@ -19,7 +19,7 @@ namespace PullRequests_Review_Assistant.Application.Services
     public sealed class CodeReviewOrchestrator
     {
         private readonly ICodeReviewAgent _codeReviewAgent;
-        private readonly ILanguageAgent _languageAgent;
+        private readonly ILanguageStandardsAgent _languageStandardsAgent;
         private readonly IRepositoryPlatformService _platformService;
 
         /// <summary>
@@ -27,15 +27,15 @@ namespace PullRequests_Review_Assistant.Application.Services
         /// </summary>
         /// 
         /// <param name="codeReviewAgent">The code review agent.</param>
-        /// <param name="languageAgent">The language agent.</param>
+        /// <param name="languageStandardsAgent">The language agent.</param>
         /// <param name="platformService">The platform service.</param>
         public CodeReviewOrchestrator(
             ICodeReviewAgent codeReviewAgent,
-            ILanguageAgent languageAgent,
+            ILanguageStandardsAgent languageStandardsAgent,
             IRepositoryPlatformService platformService)
         {
             _codeReviewAgent = codeReviewAgent;
-            _languageAgent = languageAgent;
+            _languageStandardsAgent = languageStandardsAgent;
             _platformService = platformService;
         }
 
@@ -55,7 +55,7 @@ namespace PullRequests_Review_Assistant.Application.Services
             // Step 1: Language-specific enrichment
             if (!string.IsNullOrWhiteSpace(config.TargetLanguage))
             {
-                var languagePrompt = await _languageAgent
+                var languagePrompt = await _languageStandardsAgent
                     .GetLanguageStandardsPromptAsync(config.TargetLanguage, cancellationToken);
 
                 _codeReviewAgent.UpdateSystemPrompt(languagePrompt);

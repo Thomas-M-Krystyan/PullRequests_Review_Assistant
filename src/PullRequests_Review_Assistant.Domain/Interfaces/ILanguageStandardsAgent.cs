@@ -4,7 +4,7 @@ namespace PullRequests_Review_Assistant.Domain.Interfaces
     /// Agent responsible for fetching official coding standards for a language
     /// and producing a system prompt enrichment for the code review agent.
     /// </summary>
-    public interface ILanguageAgent  // TODO: Rename to ICodeStandardsAgent
+    public interface ILanguageStandardsAgent
     {
         /// <summary>
         /// Fetches recommended coding standards for <paramref name="language"/>

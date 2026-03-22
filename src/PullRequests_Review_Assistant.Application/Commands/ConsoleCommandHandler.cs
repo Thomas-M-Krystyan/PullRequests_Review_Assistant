@@ -20,7 +20,7 @@ namespace PullRequests_Review_Assistant.Application.Commands
     public sealed class ConsoleCommandHandler
     {
         private readonly CodeReviewOrchestrator _orchestrator;
-        private readonly ILanguageAgent _languageAgent;
+        private readonly ILanguageStandardsAgent _languageStandardsAgent;
         private readonly ICodeReviewAgent _codeReviewAgent;
         private readonly IReviewConfigurationBuilder _reviewBuilder;
 
@@ -29,17 +29,17 @@ namespace PullRequests_Review_Assistant.Application.Commands
         /// </summary>
         /// 
         /// <param name="orchestrator">The orchestrator.</param>
-        /// <param name="languageAgent">The language agent.</param>
+        /// <param name="languageStandardsAgent">The language agent.</param>
         /// <param name="codeReviewAgent">The code review agent.</param>
         /// <param name="reviewBuilder">The review configuration builder.</param>
         public ConsoleCommandHandler(
             CodeReviewOrchestrator orchestrator,
-            ILanguageAgent languageAgent,
+            ILanguageStandardsAgent languageStandardsAgent,
             ICodeReviewAgent codeReviewAgent,
             IReviewConfigurationBuilder reviewBuilder)
         {
             _orchestrator = orchestrator;
-            _languageAgent = languageAgent;
+            _languageStandardsAgent = languageStandardsAgent;
             _codeReviewAgent = codeReviewAgent;
             _reviewBuilder = reviewBuilder;
         }
@@ -203,7 +203,7 @@ namespace PullRequests_Review_Assistant.Application.Commands
                 var language = string.Join(' ', parts[1..]);
                 Console.WriteLine($"[Language] Fetching standards for {language}...");
 
-                var enrichment = await _languageAgent.GetLanguageStandardsPromptAsync(language, cancellationToken);
+                var enrichment = await _languageStandardsAgent.GetLanguageStandardsPromptAsync(language, cancellationToken);
                 _codeReviewAgent.UpdateSystemPrompt(enrichment);
 
                 Console.WriteLine($"[Language] Code review agent updated with {language} standards.");
