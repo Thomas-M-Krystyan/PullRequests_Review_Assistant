@@ -70,58 +70,130 @@ namespace PullRequests_Review_Assistant.Application.Builders
 
         #region Additional Review Areas
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeCodeFormatting() { _areas |= ReviewArea.CodeFormatting; return this; }
+        public IReviewConfigurationBuilder IncludeCodeFormatting()
+        {
+            _areas |= ReviewArea.CodeFormatting;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeLinting() { _areas |= ReviewArea.Linting; return this; }
+        public IReviewConfigurationBuilder IncludeLinting()
+        {
+            _areas |= ReviewArea.Linting;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeCopyrights() { _areas |= ReviewArea.Copyrights; return this; }
+        public IReviewConfigurationBuilder IncludeCopyrights()
+        {
+            _areas |= ReviewArea.Copyrights;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeDocumentation() { _areas |= ReviewArea.Documentation; return this; }
+        public IReviewConfigurationBuilder IncludeDocumentation()
+        {
+            _areas |= ReviewArea.Documentation;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeNaming() { _areas |= ReviewArea.Naming; return this; }
+        public IReviewConfigurationBuilder IncludeNaming()
+        {
+            _areas |= ReviewArea.Naming;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeErrorHandling() { _areas |= ReviewArea.ErrorHandling; return this; }
+        public IReviewConfigurationBuilder IncludeErrorHandling()
+        {
+            _areas |= ReviewArea.ErrorHandling;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeConcurrency() { _areas |= ReviewArea.Concurrency; return this; }
+        public IReviewConfigurationBuilder IncludeConcurrency()
+        {
+            _areas |= ReviewArea.Concurrency;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeTesting() { _areas |= ReviewArea.Testing; return this; }
+        public IReviewConfigurationBuilder IncludeTesting()
+        {
+            _areas |= ReviewArea.Testing;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeDependencyManagement() { _areas |= ReviewArea.DependencyManagement; return this; }
+        public IReviewConfigurationBuilder IncludeDependencyManagement()
+        {
+            _areas |= ReviewArea.DependencyManagement;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeAccessibility() { _areas |= ReviewArea.Accessibility; return this; }
+        public IReviewConfigurationBuilder IncludeAccessibility()
+        {
+            _areas |= ReviewArea.Accessibility;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeLogging() { _areas |= ReviewArea.Logging; return this; }
+        public IReviewConfigurationBuilder IncludeLogging()
+        {
+            _areas |= ReviewArea.Logging;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeHardcodedSecrets() { _areas |= ReviewArea.HardcodedSecrets; return this; }
+        public IReviewConfigurationBuilder IncludeHardcodedSecrets()
+        {
+            _areas |= ReviewArea.HardcodedSecrets;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeDeadCode() { _areas |= ReviewArea.DeadCode; return this; }
+        public IReviewConfigurationBuilder IncludeDeadCode()
+        {
+            _areas |= ReviewArea.DeadCode;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeComplexity() { _areas |= ReviewArea.Complexity; return this; }
+        public IReviewConfigurationBuilder IncludeComplexity()
+        {
+            _areas |= ReviewArea.Complexity;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeDuplicateCode() { _areas |= ReviewArea.DuplicateCode; return this; }
+        public IReviewConfigurationBuilder IncludeDuplicateCode()
+        {
+            _areas |= ReviewArea.DuplicateCode;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeApiDesign() { _areas |= ReviewArea.ApiDesign; return this; }
+        public IReviewConfigurationBuilder IncludeApiDesign()
+        {
+            _areas |= ReviewArea.ApiDesign;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeArea(ReviewArea area) { _areas |= area; return this; }
+        public IReviewConfigurationBuilder IncludeArea(ReviewArea area)
+        {
+            _areas |= area;
+            return this;
+        }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder IncludeAll() { _areas = ReviewArea.All; return this; }
+        public IReviewConfigurationBuilder IncludeAll()
+        {
+            _areas = ReviewArea.All;
+            return this;
+        }
         #endregion
 
         /// <inheritdoc />
