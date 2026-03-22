@@ -1,4 +1,5 @@
 using ModelContextProtocol.Client;
+using PullRequests_Review_Assistant.Domain.Entities;
 using PullRequests_Review_Assistant.Domain.Interfaces;
 
 namespace PullRequests_Review_Assistant.Infrastructure.Platform.Parent
@@ -33,6 +34,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform.Parent
             }
         }
 
+        #region Abstract methods
         /// <inheritdoc />
         public abstract Task InitializeAsync(bool requiresTwoFactor = false, CancellationToken cancellationToken = default);
 
@@ -43,8 +45,10 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform.Parent
         /// <inheritdoc />
         public abstract Task PostReviewCommentAsync(
             string owner, string repo, int pullRequestId,
-            Domain.Entities.ReviewComment comment, CancellationToken cancellationToken = default);
+            ReviewComment comment, CancellationToken cancellationToken = default);
+        #endregion
 
+        #region Protected methods
         /// <summary>
         /// Stores the fully constructed MCP client. Called once from <see cref="InitializeAsync"/>.
         /// </summary>
@@ -54,6 +58,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform.Parent
         {
             _mcpClient = client;
         }
+        #endregion
 
         /// <summary>
         /// Ensures the MCP client has been set before making API calls.
@@ -72,6 +77,9 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform.Parent
         /// <inheritdoc />
         public async ValueTask DisposeAsync()
         {
+            // Suppress finalization since the cleanup is handled explicitly
+            GC.SuppressFinalize(this);
+
             if (_mcpClient is not null)
             {
                 await _mcpClient.DisposeAsync();
