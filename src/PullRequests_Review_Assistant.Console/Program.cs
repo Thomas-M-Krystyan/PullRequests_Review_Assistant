@@ -2,6 +2,7 @@ using PullRequests_Review_Assistant.Application.Commands;
 using PullRequests_Review_Assistant.Application.Services;
 using PullRequests_Review_Assistant.Domain.Enums;
 using PullRequests_Review_Assistant.Infrastructure.Agents;
+using PullRequests_Review_Assistant.Infrastructure.Auth;
 using PullRequests_Review_Assistant.Infrastructure.Configuration;
 using PullRequests_Review_Assistant.Infrastructure.Platform;
 using PullRequests_Review_Assistant.Infrastructure.Secrets;
@@ -49,12 +50,14 @@ namespace PullRequests_Review_Assistant.Console
                 var tier = ParseSubscriptionTier(args);
                 var resolvedModel = await modelConfig.ResolveModelAsync(tier, cts.Token);
 
-                // Secrets
+                // Secrets + Auth
                 var secrets = new AzureKeyVaultSecretsProvider();
+                var authFactory = new AuthStrategyFactory(secrets);
 
                 // Platform (default to GitHub; the command handler picks per-review)
-                var githubPlatform = new GitHubPlatformService();
-                await githubPlatform.InitializeAsync(cts.Token);
+                var githubAuthStrategy = authFactory.Create(PlatformType.GitHub);
+                var githubPlatform = new GitHubPlatformService(githubAuthStrategy);
+                await githubPlatform.InitializeAsync(cancellationToken: cts.Token);
 
                 // Agents
                 var codeReviewAgent = new CopilotCodeReviewAgent(resolvedModel);

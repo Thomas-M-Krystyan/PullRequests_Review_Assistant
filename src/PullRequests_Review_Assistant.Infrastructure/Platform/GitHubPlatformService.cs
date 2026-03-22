@@ -4,6 +4,8 @@ using PullRequests_Review_Assistant.Domain.Entities;
 using PullRequests_Review_Assistant.Domain.Interfaces;
 using PullRequests_Review_Assistant.Infrastructure.Extensions;
 
+#pragma warning disable IDE0290  // Disable warnings about using primary constructors
+
 namespace PullRequests_Review_Assistant.Infrastructure.Platform
 {
     /// <summary>
@@ -13,15 +15,38 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
     public sealed class GitHubPlatformService : IRepositoryPlatformService, IAsyncDisposable
     {
         private const string PlatformName = "GitHub";
+        private const string TokenEnvVar = "GITHUB_PERSONAL_ACCESS_TOKEN";
+
+        private readonly IAuthStrategy _authStrategy;
 
         private IMcpClient? _mcpClient;  // TODO: Extract to parent
 
         /// <summary>
-        /// Initializes the MCP client connected to the GitHub MCP server.
-        /// Requires GITHUB_PERSONAL_ACCESS_TOKEN environment variable.
+        /// Initializes a new instance of the <see cref="GitHubPlatformService"/> class.
         /// </summary>
-        public async Task InitializeAsync(CancellationToken cancellationToken = default)
+        ///
+        /// <param name="authStrategy">
+        /// The authentication strategy used to resolve a GitHub personal access token.
+        /// </param>
+        public GitHubPlatformService(IAuthStrategy authStrategy)
         {
+            _authStrategy = authStrategy;
+        }
+
+        /// <summary>
+        /// Resolves the GitHub token via the auth strategy, sets it as the environment
+        /// variable expected by the MCP server, then starts the MCP client.
+        /// </summary>
+        ///
+        /// <param name="requiresTwoFactor">Whether two-factor authentication is required.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        public async Task InitializeAsync(bool requiresTwoFactor = false, CancellationToken cancellationToken = default)
+        {
+            var token = await _authStrategy.AuthenticateAsync(requiresTwoFactor, cancellationToken);
+
+            // The MCP GitHub server reads the token from this environment variable
+            Environment.SetEnvironmentVariable(TokenEnvVar, token);
+
             _mcpClient = await McpClientFactory.CreateAsync(
                 // The transport layer defines how the client communicates with the server
                 new StdioClientTransport(
@@ -93,7 +118,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
             if (_mcpClient is not null)
             {
                 await _mcpClient.DisposeAsync();
-                
+
                 // Clear reference after disposal (prevents ObjectDisposedException on subsequent calls)
                 _mcpClient = null;
             }
@@ -107,7 +132,8 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
         {
             if (_mcpClient is null)
             {
-                throw new InvalidOperationException($"{PlatformName} MCP client not initialized. Call {nameof(InitializeAsync)} first.");
+                throw new InvalidOperationException(
+                    $"{PlatformName} MCP client not initialized. Call {nameof(InitializeAsync)} first.");
             }
         }
     }
