@@ -1,5 +1,4 @@
 using GitHub.Copilot.SDK;
-using Microsoft.Agents.AI;
 using PullRequests_Review_Assistant.Domain.Entities;
 using PullRequests_Review_Assistant.Domain.Enums;
 using PullRequests_Review_Assistant.Domain.Interfaces;
@@ -7,18 +6,18 @@ using PullRequests_Review_Assistant.Domain.Templates;
 using PullRequests_Review_Assistant.Domain.ValueObjects;
 using System.Text.Json;
 
+#pragma warning disable IDE0290  // Disable warnings about using primary constructors
+
 namespace PullRequests_Review_Assistant.Infrastructure.Agents
 {
     /// <summary>
     /// Code review agent powered by GitHub Copilot SDK.
-    /// Uses <see cref="CopilotClient"/> and the Microsoft Agent Framework
-    /// to perform AI-driven code reviews.
+    /// Uses <see cref="CopilotClient"/> to perform AI-driven code reviews.
     /// </summary>
     public sealed class CopilotCodeReviewAgent : ICodeReviewAgent, IAsyncDisposable
     {
         private readonly string _modelId;
         private readonly CopilotClient _copilotClient;
-        private AIAgent? _agent;
         private string _additionalPrompt = string.Empty;
 
         private static readonly JsonSerializerOptions _serializerOptions = new()
@@ -34,50 +33,20 @@ namespace PullRequests_Review_Assistant.Infrastructure.Agents
         public CopilotCodeReviewAgent(string modelId)
         {
             _modelId = modelId;
-
-            // The GitHub Copilot SDK resolves the model via the GITHUB_COPILOT_MODEL
-            // environment variable. Pin it here so every agent (re)creation uses the
-            // correct model, regardless of any later environment changes
-            Environment.SetEnvironmentVariable("GITHUB_COPILOT_MODEL", _modelId);
-
             _copilotClient = new CopilotClient();
-        }
-
-        /// <summary>
-        /// Starts the Copilot client and creates the AI agent.
-        /// Must be called before any review operations.
-        /// </summary>
-        public async Task InitializeAsync(CancellationToken cancellationToken = default)
-        {
-            await _copilotClient.StartAsync(cancellationToken);
-
-            _agent = CreateAgent(BuildFullSystemPrompt(ReviewArea.CoreReview));
         }
 
         /// <inheritdoc />
         public void UpdateSystemPrompt(string additionalPrompt)
         {
             _additionalPrompt = additionalPrompt;
-
-            // Recreate agent with updated instructions
-            _agent = CreateAgent(BuildFullSystemPrompt(ReviewArea.CoreReview) + _additionalPrompt);
         }
 
         /// <inheritdoc />
-        /// <exception cref="InvalidOperationException"/>
         public async Task<IReadOnlyList<ReviewComment>> ReviewFileAsync(
             PullRequestFile file, ReviewConfiguration config, CancellationToken cancellationToken = default)
         {
-            if (_agent is null)
-            {
-                throw new InvalidOperationException("Agent not initialized. Call InitializeAsync first.");
-            }
-
-            var systemPrompt = BuildFullSystemPrompt(config.Areas);
-            var fullPrompt = systemPrompt + _additionalPrompt;
-
-            // Reconstruct agent with current review areas
-            _agent = CreateAgent(fullPrompt);
+            var systemPrompt = BuildFullSystemPrompt(config.Areas) + _additionalPrompt;
 
             var userPrompt = $"""
                               Review the following file diff from a pull request.
@@ -95,38 +64,30 @@ namespace PullRequests_Review_Assistant.Infrastructure.Agents
                               Produce your review comments as a JSON array.
                               """;
 
-            var response = await _agent.RunAsync(userPrompt, cancellationToken: cancellationToken);
+            await using var session = await _copilotClient.CreateSessionAsync(new SessionConfig
+            {
+                Model = _modelId,
+                SystemMessage = new SystemMessageConfig
+                {
+                    Content = systemPrompt
+                },
+                OnPermissionRequest = PermissionHandler.ApproveAll
+            },
+            cancellationToken);
 
-            return ParseReviewComments(response.Text, file.FilePath);
+            var response = await session.SendAndWaitAsync(new MessageOptions
+            {
+                Prompt = userPrompt
+            },
+            cancellationToken: cancellationToken);
+
+            return ParseReviewComments(response?.Data.Content ?? string.Empty, file.FilePath);
         }
 
         /// <inheritdoc />
         public async ValueTask DisposeAsync()
         {
             await _copilotClient.DisposeAsync();
-        }
-
-        /// <summary>
-        /// Creates an <see cref="AIAgent"/> pinned to <see cref="_modelId"/> with the given instructions.
-        /// </summary>
-        /// 
-        /// <remarks>
-        /// The GitHub Copilot SDK selects the model via the <c>GITHUB_COPILOT_MODEL</c>
-        /// environment variable. The variable is set here before every agent creation to
-        /// guarantee the correct model is used even if the environment has changed since
-        /// construction.
-        /// </remarks>
-        /// 
-        /// <param name="instructions">The system prompt instructions for the agent.</param>
-        /// 
-        /// <returns>
-        /// A new <see cref="AIAgent"/> instance.
-        /// </returns>
-        private AIAgent CreateAgent(string instructions)
-        {
-            Environment.SetEnvironmentVariable("GITHUB_COPILOT_MODEL", _modelId);
-
-            return _copilotClient.AsAIAgent(instructions: instructions);
         }
 
         /// <summary>

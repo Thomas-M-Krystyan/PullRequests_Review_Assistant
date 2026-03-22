@@ -6,8 +6,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Auth
 {
     /// <summary>
     /// Bitbucket authentication strategy.
-    /// Uses an app password from Azure Key Vault,
-    /// with optional OAuth2 for 2FA.
+    /// Uses an app password from Azure Key Vault.
     /// </summary>
     /// <remarks>
     /// Returns credentials in <c>username:app-password</c> format,
@@ -36,27 +35,13 @@ namespace PullRequests_Review_Assistant.Infrastructure.Auth
         ///   <inheritdoc select="returns"/>
         ///   A composite credential string in <c>username:app-password</c> format.
         /// </returns>
-        /// <exception cref="InvalidOperationException"/>
-        public async Task<string> AuthenticateAsync(bool requiresTwoFactor, CancellationToken cancellationToken = default)
+        public async Task<string> AuthenticateAsync(CancellationToken cancellationToken = default)
         {
             var username = await _secrets.GetSecretAsync("bitbucket-username", cancellationToken);
             var appPassword = await _secrets.GetSecretAsync("bitbucket-app-password", cancellationToken);
 
-            if (requiresTwoFactor)
-            {
-                Console.WriteLine("[Bitbucket Auth] Two-factor authentication required.");
-                Console.Write("[Bitbucket Auth] Enter your 2FA code: ");
-                var code = Console.ReadLine()?.Trim();
-
-                if (string.IsNullOrWhiteSpace(code))
-                {
-                    throw new InvalidOperationException("2FA code is required.");
-                }
-
-                Console.WriteLine("[Bitbucket Auth] 2FA validated (simulated).");
-            }
-
             Console.WriteLine("[Bitbucket Auth] Authenticated successfully.");
+            Console.WriteLine();
 
             // Encode as "username:app-password" for the platform service to split
             return $"{username}:{appPassword}";

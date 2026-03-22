@@ -25,11 +25,17 @@ namespace PullRequests_Review_Assistant.Domain.Templates
         You MUST output your findings as a JSON array of objects with this schema:
         {
             "filePath": "<relative file path>",
-            "line": <line number in the diff>,
+            "line": <line number>,
             "body": "<markdown comment>",
             "severity": "critical|warning|info",
             "reviewArea": "<area name>"
         }
+        
+        CRITICAL RULES for the "line" field:
+        - The diff you receive contains lines prefixed with their line numbers after the @@ header.
+        - You MUST only use line numbers that are explicitly present as "+" (added) or " " (context) lines in the diff.
+        - NEVER invent or guess a line number. If you cannot pinpoint an exact line, use the line number of the nearest "+" line in the same hunk.
+        - The "line" value refers to the RIGHT-HAND SIDE (new file) line number, taken directly from the diff hunk header (e.g. @@ -10,6 +10,8 @@ means new file starts at line 10 in that hunk).
         
         If no issues are found for a file, return an empty array [].
         """;

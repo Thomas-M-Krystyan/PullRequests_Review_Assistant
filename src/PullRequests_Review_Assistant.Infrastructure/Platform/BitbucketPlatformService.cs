@@ -35,9 +35,9 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
 
         /// <inheritdoc />
         /// <exception cref="ArgumentException"/>
-        public override async Task InitializeAsync(bool requiresTwoFactor = false, CancellationToken cancellationToken = default)
+        public override async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
-            var credentials = await _authStrategy.AuthenticateAsync(requiresTwoFactor, cancellationToken);
+            var credentials = await _authStrategy.AuthenticateAsync(cancellationToken);
 
             // BitbucketAuthStrategy returns "username:app-password" — split on first colon only
             var separatorIndex = credentials.IndexOf(':', StringComparison.Ordinal);
@@ -55,15 +55,15 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
             Environment.SetEnvironmentVariable(UsernameEnvVar, username);
             Environment.SetEnvironmentVariable(AppPasswordEnvVar, appPassword);
 
-            var mcpClient = await McpClientFactory.CreateAsync(
-                new StdioClientTransport(
-                    new StdioClientTransportOptions
-                    {
-                        Name = "BitbucketMCP",
-                        Command = "npx",
-                        Arguments = ["-y", "@modelcontextprotocol/server-bitbucket"],
-                    }),
-                cancellationToken: cancellationToken);
+            var transport = new StdioClientTransport(
+                new StdioClientTransportOptions
+                {
+                    Name = "BitbucketMCP",
+                    Command = "npx",
+                    Arguments = ["-y", "@modelcontextprotocol/server-bitbucket"],
+                });
+
+            var mcpClient = await McpClient.CreateAsync(transport, cancellationToken: cancellationToken);
 
             SetMcpClient(mcpClient);
         }

@@ -49,7 +49,7 @@ namespace PullRequests_Review_Assistant.Console
                 var resolvedModel = await modelConfig.ResolveModelAsync(tier, cts.Token);
 
                 // Secrets + Auth
-                var secrets = new AzureKeyVaultSecretsProvider();
+                var secrets = new UserSecretsSecretsProvider("pr-review-assistant-local");
                 var authFactory = new AuthStrategyFactory(secrets);
 
                 // Platform (user selects; the command handler picks per-review)
@@ -60,10 +60,7 @@ namespace PullRequests_Review_Assistant.Console
 
                 // Agents
                 var codeReviewAgent = new CopilotCodeReviewAgent(resolvedModel);
-                await codeReviewAgent.InitializeAsync(cts.Token);
-
                 var languageAgent = new CopilotLanguageStandardsAgent();
-                await languageAgent.InitializeAsync(cts.Token);
 
                 // Orchestrator
                 var orchestrator = new CodeReviewOrchestrator(

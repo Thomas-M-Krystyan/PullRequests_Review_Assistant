@@ -24,7 +24,7 @@ namespace PullRequests_Review_Assistant.Domain.ValueObjects
         /// <summary>
         /// Language-specific coding standards appended to the system prompt.
         /// </summary>
-        public string LanguageStandards { get; init; } = string.Empty;
+        public string LanguageStandards { get; init; } = string.Empty;  // TODO: Not used
 
         /// <summary>
         /// The hosting platform for the pull request.
@@ -45,10 +45,5 @@ namespace PullRequests_Review_Assistant.Domain.ValueObjects
         /// Pull Request (PR) / Merge Request (MR) identifier.
         /// </summary>
         public required int PullRequestId { get; init; }
-
-        /// <summary>
-        /// Whether two-factor / second-step authorization is required.
-        /// </summary>
-        public bool RequiresTwoFactorAuth { get; init; }
     }
 }
