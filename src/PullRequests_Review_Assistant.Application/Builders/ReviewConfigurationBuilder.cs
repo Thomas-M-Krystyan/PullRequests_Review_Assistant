@@ -128,31 +128,22 @@ namespace PullRequests_Review_Assistant.Application.Builders
         /// <exception cref="ArgumentException"/>
         public ReviewConfiguration Build()
         {
-            if (string.IsNullOrWhiteSpace(_repoOwner))
-            {
-                throw new ArgumentException("Repository owner is required.");
-            }
-
-            if (string.IsNullOrWhiteSpace(_repoName))
-            {
-                throw new ArgumentException("Repository name is required.");
-            }
-
-            if (_pullRequestId <= 0)
-            {
-                throw new ArgumentException("A valid pull request ID is required.");
-            }
-
-            return new ReviewConfiguration
-            {
-                Areas = _areas,
-                Platform = _platform,
-                RepositoryOwner = _repoOwner,
-                RepositoryName = _repoName,
-                PullRequestId = _pullRequestId,
-                RequiresTwoFactorAuth = _twoFactor,
-                TargetLanguage = _language
-            };
+            return string.IsNullOrWhiteSpace(_repoOwner)
+                ? throw new ArgumentException("Repository owner is required.")
+                : string.IsNullOrWhiteSpace(_repoName)
+                    ? throw new ArgumentException("Repository name is required.")
+                    : _pullRequestId <= 0
+                        ? throw new ArgumentException("A valid pull request ID is required.")
+                        : new ReviewConfiguration
+                        {
+                            Areas = _areas,
+                            Platform = _platform,
+                            RepositoryOwner = _repoOwner,
+                            RepositoryName = _repoName,
+                            PullRequestId = _pullRequestId,
+                            RequiresTwoFactorAuth = _twoFactor,
+                            TargetLanguage = _language
+                        };
         }
     }
 }
