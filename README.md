@@ -8,7 +8,7 @@
 
 #### Prerequisites
 
-Before running the application against a GitHub repository, ensure the following are in place:
+Before running the application against a **GitHub repository**, ensure the following are in place:
 
 - **Node.js & npm** — required to run the MCP GitHub server via `npx`
 
@@ -141,6 +141,18 @@ Add your token:
   "github-pat": "ghp_YourTokenHere"
 }
 ```
+
+---
+
+### GitLab
+
+TBD
+
+---
+
+### Bitbucket
+
+TBD
 
 ---
 
