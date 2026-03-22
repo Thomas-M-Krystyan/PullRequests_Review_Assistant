@@ -21,7 +21,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Agents
         private readonly CopilotClient _copilotClient;
         private AIAgent? _agent;
         private string _additionalPrompt = string.Empty;
-        private readonly string _modelId;  // TODO: Use this for model selection when creating the agent
+        private readonly string _modelId;
 
         private static readonly JsonSerializerOptions _serializerOptions = new()
         {
@@ -36,6 +36,12 @@ namespace PullRequests_Review_Assistant.Infrastructure.Agents
         public CopilotCodeReviewAgent(string modelId)
         {
             _modelId = modelId;
+        
+            // The GitHub Copilot SDK resolves the model via the GITHUB_COPILOT_MODEL
+            // environment variable. Pin it here so every agent (re)creation uses the
+            // correct model, regardless of any later environment changes
+            Environment.SetEnvironmentVariable("GITHUB_COPILOT_MODEL", _modelId);
+
             _copilotClient = new CopilotClient();
         }
 
