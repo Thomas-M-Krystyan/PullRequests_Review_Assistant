@@ -61,17 +61,17 @@ namespace PullRequests_Review_Assistant.Domain.Templates
         }
 
         /// <summary>
-        /// Template for programming language-specific standards enrichment.
+        /// Template for programming language-specific coding standards enrichment.
         /// Ensures consistent formatting regardless of programming language.
         /// </summary>
         /// 
         /// <param name="programmingLanguage">The programming language name.</param>
-        /// <param name="standards">The fetched coding standards text.</param>
+        /// <param name="codingStandards">The fetched coding standards text.</param>
         /// 
         /// <returns>
-        /// A string template for programming language-specific standards enrichment.
+        /// A string template for programming language-specific coding standards enrichment.
         /// </returns>
-        public static string BuildLanguageStandardsEnrichment(string programmingLanguage, string standards)  // TODO: Rename to "codingStandards" for clarity
+        public static string BuildLanguageStandardsEnrichment(string programmingLanguage, string codingStandards)
         {
             return $"""
             
@@ -79,9 +79,9 @@ namespace PullRequests_Review_Assistant.Domain.Templates
             The code under review is written in {programmingLanguage}.
             Apply the following official and community-recommended coding standards:
             
-            {standards}
+            {codingStandards}
             
-            When reviewing, flag deviations from these standards and suggest corrections.
+            When reviewing, flag deviations from these coding standards and suggest corrections.
             === End of Language-Specific Standards ===
             """;
         }
