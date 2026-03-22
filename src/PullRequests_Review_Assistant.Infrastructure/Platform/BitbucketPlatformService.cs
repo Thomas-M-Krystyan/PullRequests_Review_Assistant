@@ -3,6 +3,7 @@ using ModelContextProtocol.Protocol;
 using PullRequests_Review_Assistant.Domain.Entities;
 using PullRequests_Review_Assistant.Domain.Interfaces;
 using PullRequests_Review_Assistant.Infrastructure.Extensions;
+using PullRequests_Review_Assistant.Infrastructure.Platform.Parent;
 
 #pragma warning disable IDE0290  // Disable warnings about using primary constructors
 
@@ -12,15 +13,12 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
     /// Bitbucket platform service using the MCP Bitbucket server
     /// to fetch PR files and post review comments.
     /// </summary>
-    public sealed class BitbucketPlatformService : IRepositoryPlatformService
+    public sealed class BitbucketPlatformService : McpPlatformServiceBase
     {
-        private const string PlatformName = "Bitbucket";
         private const string UsernameEnvVar = "BITBUCKET_USERNAME";
         private const string AppPasswordEnvVar = "BITBUCKET_APP_PASSWORD";
 
         private readonly IAuthStrategy _authStrategy;
-
-        private IMcpClient? _mcpClient;  // TODO: Extract to parent
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BitbucketPlatformService"/> class.
@@ -34,10 +32,10 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
         {
             _authStrategy = authStrategy;
         }
-        
+
         /// <inheritdoc />
         /// <exception cref="ArgumentException"/>
-        public async Task InitializeAsync(bool requiresTwoFactor = false, CancellationToken cancellationToken = default)
+        public override async Task InitializeAsync(bool requiresTwoFactor = false, CancellationToken cancellationToken = default)
         {
             var credentials = await _authStrategy.AuthenticateAsync(requiresTwoFactor, cancellationToken);
 
@@ -57,7 +55,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
             Environment.SetEnvironmentVariable(UsernameEnvVar, username);
             Environment.SetEnvironmentVariable(AppPasswordEnvVar, appPassword);
 
-            _mcpClient = await McpClientFactory.CreateAsync(
+            var mcpClient = await McpClientFactory.CreateAsync(
                 new StdioClientTransport(
                     new StdioClientTransportOptions
                     {
@@ -66,15 +64,15 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
                         Arguments = ["-y", "@modelcontextprotocol/server-bitbucket"],
                     }),
                 cancellationToken: cancellationToken);
+
+            SetMcpClient(mcpClient);
         }
 
         /// <inheritdoc />
-        public async Task<IReadOnlyList<PullRequestFile>> GetPullRequestFilesAsync(
+        public override async Task<IReadOnlyList<PullRequestFile>> GetPullRequestFilesAsync(
             string owner, string repo, int pullRequestId, CancellationToken cancellationToken = default)
         {
-            EnsureInitialized();
-
-            var result = await _mcpClient!.CallToolAsync("get_pull_request_diff", new Dictionary<string, object?>
+            var result = await McpClient.CallToolAsync("get_pull_request_diff", new Dictionary<string, object?>
             {
                 ["workspace"] = owner,
                 ["repo_slug"] = repo,
@@ -96,13 +94,11 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
         }
 
         /// <inheritdoc />
-        public async Task PostReviewCommentAsync(
+        public override async Task PostReviewCommentAsync(
             string owner, string repo, int pullRequestId,
             ReviewComment comment, CancellationToken cancellationToken = default)
         {
-            EnsureInitialized();
-
-            await _mcpClient!.CallToolAsync("create_pull_request_comment", new Dictionary<string, object?>
+            await McpClient.CallToolAsync("create_pull_request_comment", new Dictionary<string, object?>
             {
                 ["workspace"] = owner,
                 ["repo_slug"] = repo,
@@ -110,31 +106,6 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
                 ["body"] = $"**[{comment.Severity}]** _{comment.ReviewArea}_ — `{comment.FilePath}:{comment.Line}`\n\n{comment.Body}",
                 ["inline"] = new { path = comment.FilePath, to = comment.Line }
             }, cancellationToken: cancellationToken);
-        }
-
-        /// <inheritdoc />
-        public async ValueTask DisposeAsync()  // TODO: Extract to parent
-        {
-            if (_mcpClient is not null)
-            {
-                await _mcpClient.DisposeAsync();
-
-                // Clear reference after disposal (prevents ObjectDisposedException on subsequent calls)
-                _mcpClient = null;
-            }
-        }
-
-        /// <summary>
-        /// Ensures the MCP client is initialized before making API calls.
-        /// </summary>
-        /// <exception cref="InvalidOperationException"/>
-        private void EnsureInitialized()  // TODO: Extract to parent
-        {
-            if (_mcpClient is null)
-            {
-                throw new InvalidOperationException(
-                    $"{PlatformName} MCP client not initialized. Call {nameof(InitializeAsync)} first.");
-            }
         }
     }
 }
