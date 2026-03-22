@@ -27,9 +27,9 @@ namespace PullRequests_Review_Assistant.Application.Builders.Interface
         /// Sets the repository coordinates.
         /// </summary>
         /// 
-        /// <param name="owner">The repository owner's name.</param>
+        /// <param name="repositoryOwner">The repository owner's name.</param>
         /// <param name="name">The repository name.</param>
-        public IReviewConfigurationBuilder ForRepository(string owner, string name);  // TODO: rename to "repositoryOwner" and "repositoryName" for clarity
+        public IReviewConfigurationBuilder ForRepository(string repositoryOwner, string name);  // TODO: rename to "repositoryName" for clarity
 
         /// <summary>
         /// Sets the pull request ID.

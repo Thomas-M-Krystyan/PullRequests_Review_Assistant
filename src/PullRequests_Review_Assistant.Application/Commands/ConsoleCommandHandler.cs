@@ -105,10 +105,10 @@ namespace PullRequests_Review_Assistant.Application.Commands
             {
                 var inputParts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-                // Parse: review <platform> <owner> <repo> <pr-id> [options...]
+                // Parse: review <platform> <repositoryOwner> <repo> <pr-id> [options...]
                 if (inputParts.Length < 5)
                 {
-                    Console.WriteLine("Usage: review <github|gitlab|bitbucket> <owner> <repo> <pr-id> [options]");
+                    Console.WriteLine("Usage: review <github|gitlab|bitbucket> <repositoryOwner> <repo> <pr-id> [options]");
                     Console.WriteLine("Options: --2fa --lang=<language> --formatting --linting --copyrights");
                     Console.WriteLine("         --docs --naming --errors --concurrency --testing --deps");
                     Console.WriteLine("         --a11y --logging --secrets --deadcode --complexity --duplicates");
@@ -127,7 +127,7 @@ namespace PullRequests_Review_Assistant.Application.Commands
                                    ?? throw new ArgumentException($"Invalid platform: {platform}");
 
                 _reviewBuilder.ForPlatform(platformType)
-                    .ForRepository(owner: owner, name: name)
+                    .ForRepository(repositoryOwner: owner, name: name)
                     .ForPullRequest(int.Parse(pullRequestId));
 
                 // Parse optional flags
@@ -226,7 +226,7 @@ namespace PullRequests_Review_Assistant.Application.Commands
                               ║              PR Review Assistant — Commands                      ║
                               ╠══════════════════════════════════════════════════════════════════╣
                               ║                                                                  ║
-                              ║  review <platform> <owner> <repo> <pr-id> [options]              ║
+                              ║  review <platform> <repositoryOwner> <repo> <pr-id> [options]              ║
                               ║    Platforms: github, gitlab, bitbucket                          ║
                               ║                                                                  ║
                               ║    Core areas (always included):                                 ║

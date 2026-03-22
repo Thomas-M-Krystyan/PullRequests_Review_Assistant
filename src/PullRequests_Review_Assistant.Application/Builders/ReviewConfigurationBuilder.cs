@@ -36,9 +36,9 @@ namespace PullRequests_Review_Assistant.Application.Builders
         }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder ForRepository(string owner, string name)
+        public IReviewConfigurationBuilder ForRepository(string repositoryOwner, string name)
         {
-            _owner = owner;
+            _owner = repositoryOwner;
             _repoName = name;
 
             return this;
