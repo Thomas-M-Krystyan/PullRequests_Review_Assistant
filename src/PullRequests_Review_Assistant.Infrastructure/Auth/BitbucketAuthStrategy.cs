@@ -57,6 +57,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Auth
             }
 
             Console.WriteLine("[Bitbucket Auth] Authenticated successfully.");
+            Console.WriteLine();
 
             // Encode as "username:app-password" for the platform service to split
             return $"{username}:{appPassword}";

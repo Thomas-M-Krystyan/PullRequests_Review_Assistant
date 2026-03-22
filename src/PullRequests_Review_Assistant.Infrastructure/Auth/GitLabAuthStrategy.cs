@@ -44,6 +44,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Auth
             }
 
             Console.WriteLine("[GitLab Auth] Authenticated successfully.");
+            Console.WriteLine();
 
             return token;
         }

@@ -44,6 +44,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Auth
             }
 
             Console.WriteLine("[GitHub Auth] Authenticated successfully.");
+            Console.WriteLine();
 
             return token;
         }
