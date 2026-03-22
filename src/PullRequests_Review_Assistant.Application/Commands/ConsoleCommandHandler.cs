@@ -112,7 +112,7 @@ namespace PullRequests_Review_Assistant.Application.Commands
                     Console.WriteLine("Options: --2fa --lang=<language> --formatting --linting --copyrights");
                     Console.WriteLine("         --docs --naming --errors --concurrency --testing --deps");
                     Console.WriteLine("         --a11y --logging --secrets --deadcode --complexity --duplicates");
-                    Console.WriteLine("         --api --all");
+                    Console.WriteLine("         --api --area=<ReviewArea> --all");
 
                     return;
                 }
@@ -157,6 +157,11 @@ namespace PullRequests_Review_Assistant.Application.Commands
 
                         // Language option
                         _ when reviewOption.StartsWith("--lang=") => _reviewBuilder.WithLanguage(reviewOption["--lang=".Length..]),
+
+                        // ReviewArea option
+                        _ when reviewOption.StartsWith("--area=") => Enum.TryParse<ReviewArea>(inputParts[index]["--area=".Length..], ignoreCase: true, out var area)
+                            ? reviewBuilder.IncludeArea(area)
+                            : throw new ArgumentException($"Unknown review area: '{inputParts[index]["--area=".Length..]}'.  Valid values: {string.Join(", ", Enum.GetNames<ReviewArea>())}"),
 
                         // Unrecognized option
                         _ => throw new ArgumentException($"Unknown option: {reviewOption}")
@@ -228,25 +233,26 @@ namespace PullRequests_Review_Assistant.Application.Commands
                               ║      Performance, Architecture, Vulnerabilities, CodeSmells      ║
                               ║                                                                  ║
                               ║    Options (extended review areas):                              ║
-                              ║      --2fa          Enable two-factor auth                       ║
-                              ║      --lang=<lang>  Set target language (C#, Python, etc.)       ║
-                              ║      --formatting   Include code formatting review               ║
-                              ║      --linting      Include linting review                       ║
-                              ║      --copyrights   Include copyright header review              ║
-                              ║      --docs         Include documentation review                 ║
-                              ║      --naming       Include naming convention review             ║
-                              ║      --errors       Include error handling review                ║
-                              ║      --concurrency  Include concurrency review                   ║
-                              ║      --testing      Include testing review                       ║
-                              ║      --deps         Include dependency management review         ║
-                              ║      --a11y         Include accessibility review                 ║
-                              ║      --logging      Include logging review                       ║
-                              ║      --secrets      Include hardcoded secrets review             ║
-                              ║      --deadcode     Include dead code review                     ║
-                              ║      --complexity   Include complexity review                    ║
-                              ║      --duplicates   Include duplicate code review                ║
-                              ║      --api          Include API design review                    ║
-                              ║      --all          Include ALL review areas                     ║
+                              ║      --2fa               Enable two-factor auth                  ║
+                              ║      --lang=<lang>       Set target language (C#, Python, etc.)  ║
+                              ║      --formatting        Include code formatting review          ║
+                              ║      --linting           Include linting review                  ║
+                              ║      --copyrights        Include copyright header review         ║
+                              ║      --docs              Include documentation review            ║
+                              ║      --naming            Include naming convention review        ║
+                              ║      --errors            Include error handling review           ║
+                              ║      --concurrency       Include concurrency review              ║
+                              ║      --testing           Include testing review                  ║
+                              ║      --deps              Include dependency management review    ║
+                              ║      --a11y              Include accessibility review            ║
+                              ║      --logging           Include logging review                  ║
+                              ║      --secrets           Include hardcoded secrets review        ║
+                              ║      --deadcode          Include dead code review                ║
+                              ║      --complexity        Include complexity review               ║
+                              ║      --duplicates        Include duplicate code review           ║
+                              ║      --api               Include API design review               ║
+                              ║      --area=<ReviewArea> Include an arbitrary review area        ║
+                              ║      --all               Include ALL review areas                ║
                               ║                                                                  ║
                               ║  language <lang>    Set/change review language at runtime        ║
                               ║  --help / -h        Show this help                               ║
