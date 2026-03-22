@@ -222,42 +222,52 @@ namespace PullRequests_Review_Assistant.Application.Commands
             Console.OutputEncoding = Encoding.UTF8;  // Ensure proper rendering of box-drawing characters
 
             Console.WriteLine("""
-                              ╔══════════════════════════════════════════════════════════════════╗
-                              ║              PR Review Assistant — Commands                      ║
-                              ╠══════════════════════════════════════════════════════════════════╣
-                              ║                                                                  ║
-                              ║  review <platform> <owner> <repo> <pr-id> [options]              ║
-                              ║    Platforms: github, gitlab, bitbucket                          ║
-                              ║                                                                  ║
-                              ║    Core areas (always included):                                 ║
-                              ║      Performance, Architecture, Vulnerabilities, CodeSmells      ║
-                              ║                                                                  ║
-                              ║    Options (extended review areas):                              ║
-                              ║      --2fa               Enable two-factor auth                  ║
-                              ║      --lang=<lang>       Set target language (C#, Python, etc.)  ║
-                              ║      --formatting        Include code formatting review          ║
-                              ║      --linting           Include linting review                  ║
-                              ║      --copyrights        Include copyright header review         ║
-                              ║      --docs              Include documentation review            ║
-                              ║      --naming            Include naming convention review        ║
-                              ║      --errors            Include error handling review           ║
-                              ║      --concurrency       Include concurrency review              ║
-                              ║      --testing           Include testing review                  ║
-                              ║      --deps              Include dependency management review    ║
-                              ║      --a11y              Include accessibility review            ║
-                              ║      --logging           Include logging review                  ║
-                              ║      --secrets           Include hardcoded secrets review        ║
-                              ║      --deadcode          Include dead code review                ║
-                              ║      --complexity        Include complexity review               ║
-                              ║      --duplicates        Include duplicate code review           ║
-                              ║      --api               Include API design review               ║
-                              ║      --area=<ReviewArea> Include an arbitrary review area        ║
-                              ║      --all               Include ALL review areas                ║
-                              ║                                                                  ║
-                              ║  language <lang>    Set/change review language at runtime        ║
-                              ║  --help / -h        Show this help                               ║
-                              ║  exit / quit        Exit the application                         ║
-                              ╚══════════════════════════════════════════════════════════════════╝
+                              ╔════════════════════════════════════════════════════════════════════╗
+                              ║                  PR Review Assistant — Commands                    ║
+                              ╠════════════════════════════════════════════════════════════════════╣
+                              ║                                                                    ║
+                              ║  Command: review <platform> <owner> <repo> <pr-id> [options]       ║
+                              ║                                                                    ║
+                              ║  Platforms: github, gitlab, bitbucket                              ║
+                              ║                                                                    ║
+                              ║  Core areas (always included):                                     ║
+                              ║    Performance, Architecture, Vulnerabilities, CodeSmells          ║
+                              ║                                                                    ║
+                              ║  Review options:                                                   ║
+                              ║    --lang=<lang>       Set target language per current review      ║
+                              ║                        (e.g., C#, Python, TypeScript, C++)         ║
+                              ║                                                                    ║
+                              ║    --formatting        Include code formatting review              ║
+                              ║    --linting           Include linting review                      ║
+                              ║    --copyrights        Include copyright header review             ║
+                              ║    --docs              Include documentation review                ║
+                              ║    --naming            Include naming convention review            ║
+                              ║    --errors            Include error handling review               ║
+                              ║    --concurrency       Include concurrency review                  ║
+                              ║    --testing           Include testing review                      ║
+                              ║    --deps              Include dependency management review        ║
+                              ║    --a11y              Include accessibility review                ║
+                              ║    --logging           Include logging review                      ║
+                              ║    --secrets           Include hardcoded secrets review            ║
+                              ║    --deadcode          Include dead code review                    ║
+                              ║    --complexity        Include complexity review                   ║
+                              ║    --duplicates        Include duplicate code review               ║
+                              ║    --api               Include API design review                   ║
+                              ║                                                                    ║
+                              ║    --all               Include ALL review areas                    ║
+                              ║                                                                    ║
+                              ║    --area=<xyz>        For combined groupings e.g., "CoreReview"   ║
+                              ║                                                                    ║
+                              ║  Global options:                                                   ║
+                              ║    language <lang>     Set/change code review language for Agent   ║
+                              ║                        at runtime, to use this standard globally   ║
+                              ║                        for all subsequent reviews and overriding   ║
+                              ║                        the review language set from --lang=<lang>  ║
+                              ║                        or inferred from file extension (fallback)  ║
+                              ║                                                                    ║
+                              ║    --help / --h / -h   Show this help                              ║
+                              ║    exit / quit         Exit the application                        ║
+                              ╚════════════════════════════════════════════════════════════════════╝
                               """);
         }
     }
