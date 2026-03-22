@@ -21,6 +21,13 @@ namespace PullRequests_Review_Assistant.Console
     /// </summary>
     internal class Program
     {
+        /// <summary>
+        /// The entry point of the application. Sets up configuration, authentication,
+        /// platform services, agents, and the console command handler, then starts the
+        /// interactive loop.
+        /// 
+        /// </summary>
+        /// <param name="args">The arguments.</param>
         private static async Task Main(string[] args)
         {
             NetConsole.OutputEncoding = Encoding.UTF8;  // Ensure proper rendering of box-drawing characters
@@ -112,12 +119,12 @@ namespace PullRequests_Review_Assistant.Console
         /// <exception cref="ArgumentException"/>
         private static IRepositoryPlatformService CreatePlatformService(
             PlatformType platformType, IAuthStrategy authStrategy) => platformType switch
-        {
-            PlatformType.GitHub    => new GitHubPlatformService(authStrategy),
-            PlatformType.GitLab    => new GitLabPlatformService(authStrategy),
-            PlatformType.Bitbucket => new BitbucketPlatformService(authStrategy),
+            {
+                PlatformType.GitHub    => new GitHubPlatformService(authStrategy),
+                PlatformType.GitLab    => new GitLabPlatformService(authStrategy),
+                PlatformType.Bitbucket => new BitbucketPlatformService(authStrategy),
 
-            _ => throw new ArgumentException($"Unsupported platform: {platformType}", nameof(platformType))
-        };
+                _ => throw new ArgumentException($"Unsupported platform: {platformType}", nameof(platformType))
+            };
     }
 }

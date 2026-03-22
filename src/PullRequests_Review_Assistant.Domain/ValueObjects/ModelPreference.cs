@@ -14,7 +14,7 @@ namespace PullRequests_Review_Assistant.Domain.ValueObjects
         /// The primary model identifier (e.g., "claude-opus-4.6", "gemini-3.1-pro").
         /// </summary>
         public required string PrimaryModel { get; init; }
-    
+
         /// <summary>
         /// The secondary model identifier (e.g., "claude-sonnet-4.6", "gpt-4.1").
         /// </summary>

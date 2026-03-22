@@ -53,7 +53,7 @@ namespace PullRequests_Review_Assistant.Application.Builders.Interface
         // -----------------------
         // Additional review areas
         // -----------------------
-        
+
         /// <summary>
         /// Adds code formatting review.
         /// </summary>
