@@ -15,6 +15,6 @@ namespace PullRequests_Review_Assistant.Domain.Interfaces
         /// <returns>
         ///   The secret value.
         /// </returns>
-        public Task<string> GetSecretAsync(string secretName, CancellationToken cancellationToken = default);
+        Task<string> GetSecretAsync(string secretName, CancellationToken cancellationToken = default);
     }
 }

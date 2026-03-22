@@ -23,7 +23,7 @@ namespace PullRequests_Review_Assistant.Domain.Interfaces
         /// <returns>
         /// A list of review comments.
         /// </returns>
-        public Task<IReadOnlyList<ReviewComment>> ReviewFileAsync(
+        Task<IReadOnlyList<ReviewComment>> ReviewFileAsync(
             PullRequestFile file, ReviewConfiguration config, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -31,6 +31,6 @@ namespace PullRequests_Review_Assistant.Domain.Interfaces
         /// </summary>
         /// 
         /// <param name="additionalPrompt">The additional prompt to include.</param>
-        public void UpdateSystemPrompt(string additionalPrompt);
+        void UpdateSystemPrompt(string additionalPrompt);
     }
 }

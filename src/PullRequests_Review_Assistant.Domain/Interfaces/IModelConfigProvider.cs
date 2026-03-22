@@ -18,7 +18,7 @@ namespace PullRequests_Review_Assistant.Domain.Interfaces
         /// <returns>
         /// The preferred model (with fallback) for the given tier.
         /// </returns>
-        public ModelPreference GetPreferredModel(SubscriptionTier tier);
+        ModelPreference GetPreferredModel(SubscriptionTier tier);
 
         /// <summary>
         /// Attempts to resolve a usable model, falling back if needed.
@@ -30,6 +30,6 @@ namespace PullRequests_Review_Assistant.Domain.Interfaces
         /// <returns>
         /// String identifier of the resolved model.
         /// </returns>
-        public Task<string> ResolveModelAsync(SubscriptionTier tier, CancellationToken cancellationToken = default);
+        Task<string> ResolveModelAsync(SubscriptionTier tier, CancellationToken cancellationToken = default);
     }
 }

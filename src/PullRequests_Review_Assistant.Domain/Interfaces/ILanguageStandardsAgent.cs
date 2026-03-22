@@ -15,6 +15,6 @@ namespace PullRequests_Review_Assistant.Domain.Interfaces
         /// <param name="cancellationToken">The cancellation token.</param>
         /// 
         /// <returns>A formatted system prompt enrichment string.</returns>
-        public Task<string> GetLanguageStandardsPromptAsync(string programmingLanguage, CancellationToken cancellationToken = default);
+        Task<string> GetLanguageStandardsPromptAsync(string programmingLanguage, CancellationToken cancellationToken = default);
     }
 }

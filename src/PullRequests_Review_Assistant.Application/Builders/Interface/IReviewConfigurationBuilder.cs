@@ -21,7 +21,7 @@ namespace PullRequests_Review_Assistant.Application.Builders.Interface
         /// </summary>
         /// 
         /// <param name="platform">The platform type.</param>
-        public IReviewConfigurationBuilder ForPlatform(PlatformType platform);
+        IReviewConfigurationBuilder ForPlatform(PlatformType platform);
 
         /// <summary>
         /// Sets the repository coordinates.
@@ -29,26 +29,26 @@ namespace PullRequests_Review_Assistant.Application.Builders.Interface
         /// 
         /// <param name="repositoryOwner">The repository owner's name.</param>
         /// <param name="repositoryName">The repository name.</param>
-        public IReviewConfigurationBuilder ForRepository(string repositoryOwner, string repositoryName);
+        IReviewConfigurationBuilder ForRepository(string repositoryOwner, string repositoryName);
 
         /// <summary>
         /// Sets the pull request ID.
         /// </summary>
         /// 
         /// <param name="pullRequestId">The pull request ID.</param>
-        public IReviewConfigurationBuilder ForPullRequest(int pullRequestId);
+        IReviewConfigurationBuilder ForPullRequest(int pullRequestId);
 
         /// <summary>
         /// Enables second-step authorization.
         /// </summary>
-        public IReviewConfigurationBuilder WithTwoFactorAuth();
+        IReviewConfigurationBuilder WithTwoFactorAuth();
 
         /// <summary>
         /// Sets the target programming language for standards lookup.
         /// </summary>
         /// 
         /// <param name="language">The programming language.</param>
-        public IReviewConfigurationBuilder WithLanguage(string language);
+        IReviewConfigurationBuilder WithLanguage(string language);
 
         // -----------------------
         // Additional review areas
@@ -57,98 +57,98 @@ namespace PullRequests_Review_Assistant.Application.Builders.Interface
         /// <summary>
         /// Adds code formatting review.
         /// </summary>
-        public IReviewConfigurationBuilder IncludeCodeFormatting();
+        IReviewConfigurationBuilder IncludeCodeFormatting();
 
         /// <summary>
         /// Adds linting review.
         /// </summary>
-        public IReviewConfigurationBuilder IncludeLinting();
+        IReviewConfigurationBuilder IncludeLinting();
 
         /// <summary>
         /// Adds copyright header review.
         /// </summary>
-        public IReviewConfigurationBuilder IncludeCopyrights();
+        IReviewConfigurationBuilder IncludeCopyrights();
 
         /// <summary>
         /// Adds documentation review.
         /// </summary>
-        public IReviewConfigurationBuilder IncludeDocumentation();
+        IReviewConfigurationBuilder IncludeDocumentation();
 
         /// <summary>
         /// Adds naming convention review.
         /// </summary>
-        public  IReviewConfigurationBuilder IncludeNaming();
+        IReviewConfigurationBuilder IncludeNaming();
 
         /// <summary>
         /// Adds error handling review.
         /// </summary>
-        public IReviewConfigurationBuilder IncludeErrorHandling();
+        IReviewConfigurationBuilder IncludeErrorHandling();
 
         /// <summary>
         /// Adds concurrency review.
         /// </summary>
-        public IReviewConfigurationBuilder IncludeConcurrency();
+        IReviewConfigurationBuilder IncludeConcurrency();
 
         /// <summary>
         /// Adds testing review.
         /// </summary>
-        public IReviewConfigurationBuilder IncludeTesting();
+        IReviewConfigurationBuilder IncludeTesting();
 
         /// <summary>
         /// Adds dependency management review.
         /// </summary>
-        public IReviewConfigurationBuilder IncludeDependencyManagement();
+        IReviewConfigurationBuilder IncludeDependencyManagement();
 
         /// <summary>
         /// Adds accessibility review.
         /// </summary>
-        public IReviewConfigurationBuilder IncludeAccessibility();
+        IReviewConfigurationBuilder IncludeAccessibility();
 
         /// <summary>
         /// Adds logging review.
         /// </summary>
-        public IReviewConfigurationBuilder IncludeLogging();
+        IReviewConfigurationBuilder IncludeLogging();
 
         /// <summary>
         /// Adds hardcoded secrets detection review.
         /// </summary>
-        public IReviewConfigurationBuilder IncludeHardcodedSecrets();
+        IReviewConfigurationBuilder IncludeHardcodedSecrets();
 
         /// <summary>
         /// Adds dead code review.
         /// </summary>
-        public IReviewConfigurationBuilder IncludeDeadCode();
+        IReviewConfigurationBuilder IncludeDeadCode();
 
         /// <summary>
         /// Adds complexity review.
         /// </summary>
-        public IReviewConfigurationBuilder IncludeComplexity();
+        IReviewConfigurationBuilder IncludeComplexity();
 
         /// <summary>
         /// Adds duplicate code review.
         /// </summary>
-        public IReviewConfigurationBuilder IncludeDuplicateCode();
+        IReviewConfigurationBuilder IncludeDuplicateCode();
 
         /// <summary>
         /// Adds API design review.
         /// </summary>
-        public IReviewConfigurationBuilder IncludeApiDesign();
+        IReviewConfigurationBuilder IncludeApiDesign();
 
         /// <summary>
         /// Adds an arbitrary <see cref="ReviewArea"/> flag (extension point).
         /// </summary>
         /// 
         /// <param name="area">The review area to include.</param>
-        public IReviewConfigurationBuilder IncludeArea(ReviewArea area);
+        IReviewConfigurationBuilder IncludeArea(ReviewArea area);
 
         /// <summary>
         /// Includes all available review areas.
         /// </summary>
-        public IReviewConfigurationBuilder IncludeAll();
+        IReviewConfigurationBuilder IncludeAll();
 
         /// <summary>
         /// Builds the immutable <see cref="ReviewConfiguration"/>.
         /// </summary>
-        public ReviewConfiguration Build();
+        ReviewConfiguration Build();
     }
 }

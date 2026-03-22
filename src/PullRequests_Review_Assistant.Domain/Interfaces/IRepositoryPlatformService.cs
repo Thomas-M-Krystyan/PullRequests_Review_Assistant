@@ -18,7 +18,7 @@ namespace PullRequests_Review_Assistant.Domain.Interfaces
         ///
         /// <param name="requiresTwoFactor">Whether two-factor authentication is required.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public Task InitializeAsync(bool requiresTwoFactor = false, CancellationToken cancellationToken = default);
+        Task InitializeAsync(bool requiresTwoFactor = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Fetches all changed files in the pull request.
@@ -32,7 +32,7 @@ namespace PullRequests_Review_Assistant.Domain.Interfaces
         /// <returns>
         /// A list of files changed in the pull request.
         /// </returns>
-        public Task<IReadOnlyList<PullRequestFile>> GetPullRequestFilesAsync(
+        Task<IReadOnlyList<PullRequestFile>> GetPullRequestFilesAsync(
             string owner, string repo, int pullRequestId, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace PullRequests_Review_Assistant.Domain.Interfaces
         /// <param name="pullRequestId">The pull request identifier.</param>
         /// <param name="comment">The review comment to post.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public Task PostReviewCommentAsync(  // TODO: result + created comment's ID for future reference (e.g., updates/deletes)
+        Task PostReviewCommentAsync(  // TODO: result + created comment's ID for future reference (e.g., updates/deletes)
             string owner, string repo, int pullRequestId,
             ReviewComment comment, CancellationToken cancellationToken = default);
     }

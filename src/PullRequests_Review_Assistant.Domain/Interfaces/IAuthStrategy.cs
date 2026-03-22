@@ -20,6 +20,6 @@ namespace PullRequests_Review_Assistant.Domain.Interfaces
         /// <returns>
         /// A valid access token string.
         /// </returns>
-        public Task<string> AuthenticateAsync(bool requiresTwoFactor, CancellationToken cancellationToken = default);
+        Task<string> AuthenticateAsync(bool requiresTwoFactor, CancellationToken cancellationToken = default);
     }
 }
