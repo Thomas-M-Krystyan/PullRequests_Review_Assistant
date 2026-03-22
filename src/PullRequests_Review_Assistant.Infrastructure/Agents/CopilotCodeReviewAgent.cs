@@ -70,7 +70,8 @@ namespace PullRequests_Review_Assistant.Infrastructure.Agents
                 SystemMessage = new SystemMessageConfig
                 {
                     Content = systemPrompt
-                }
+                },
+                OnPermissionRequest = PermissionHandler.ApproveAll
             },
             cancellationToken);
 
