@@ -24,6 +24,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Auth
         }
 
         /// <inheritdoc />
+        /// <exception cref="ArgumentException"/>
         public async Task<string> AuthenticateAsync(bool requiresTwoFactor, CancellationToken cancellationToken = default)
         {
             var token = await _secrets.GetSecretAsync("gitlab-pat", cancellationToken);
@@ -35,7 +36,9 @@ namespace PullRequests_Review_Assistant.Infrastructure.Auth
                 var code = Console.ReadLine()?.Trim();
 
                 if (string.IsNullOrWhiteSpace(code))
-                    throw new InvalidOperationException("2FA code is required.");
+                {
+                    throw new ArgumentException("2FA code is required.");
+                }
 
                 Console.WriteLine("[GitLab Auth] 2FA validated (simulated).");
             }
