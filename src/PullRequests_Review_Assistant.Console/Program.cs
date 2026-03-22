@@ -37,7 +37,7 @@ namespace PullRequests_Review_Assistant.Console
             {
                 // Configuration
                 var modelConfig = new ModelConfigProvider();
-                var tier = ParseSubscriptionTier(args) ?? ConsolePrompt.PromptUserSelection<SubscriptionTier>("Tier");
+                var tier = ConsolePrompt.ParseArg<SubscriptionTier>(args, "tier") ?? ConsolePrompt.PromptUserSelection<SubscriptionTier>("Tier");
                 var resolvedModel = await modelConfig.ResolveModelAsync(tier, cts.Token);
 
                 // Secrets + Auth
@@ -45,7 +45,7 @@ namespace PullRequests_Review_Assistant.Console
                 var authFactory = new AuthStrategyFactory(secrets);
 
                 // Platform (user selects; the command handler picks per-review)
-                var platformType = ParsePlatformType(args) ?? ConsolePrompt.PromptUserSelection<PlatformType>("Platform");
+                var platformType = ConsolePrompt.ParseArg<PlatformType>(args, "platform") ?? ConsolePrompt.PromptUserSelection<PlatformType>("Platform");
                 var authStrategy = authFactory.Create(platformType);
                 var platform = CreatePlatformService(platformType, authStrategy);
                 await platform.InitializeAsync(cancellationToken: cts.Token);
@@ -91,66 +91,6 @@ namespace PullRequests_Review_Assistant.Console
                 }
                 // ReSharper restore AccessToDisposedClosure
             }
-        }
-
-        /// <summary>
-        /// Parses the subscription tier.
-        /// </summary>
-        /// 
-        /// <param name="args">The arguments.</param>
-        /// 
-        /// <returns>
-        /// The parsed <see cref="SubscriptionTier"/>, or <see cref="SubscriptionTier.Free"/> if not specified.
-        /// </returns>
-        private static SubscriptionTier? ParseSubscriptionTier(string[] args)
-        {
-            var tierArg = args.FirstOrDefault(line => line.StartsWith("--tier=", StringComparison.OrdinalIgnoreCase));
-            if (tierArg is null)
-            {
-                NetConsole.WriteLine($"[Config] No --tier specified in '{args}'.");
-
-                return null;
-            }
-
-            var value = tierArg["--tier=".Length..];
-            if (Enum.TryParse<SubscriptionTier>(value, ignoreCase: true, out var tier))
-            {
-                return tier;
-            }
-
-            NetConsole.WriteLine($"[Config] Unrecognised tier '{value}'.");
-
-            return null;
-        }
-
-        /// <summary>
-        /// Attempts to resolve the platform type from a <c>--platform=</c> command-line argument.
-        /// </summary>
-        /// 
-        /// <param name="args">The arguments.</param>
-        /// 
-        /// <returns>
-        /// The parsed <see cref="PlatformType"/>, or <see langword="null"/> if the argument is absent or invalid.
-        /// </returns>
-        private static PlatformType? ParsePlatformType(string[] args)
-        {
-            var platformArg = args.FirstOrDefault(line => line.StartsWith("--platform=", StringComparison.OrdinalIgnoreCase));
-            if (platformArg is null)
-            {
-                NetConsole.WriteLine($"[Config] No --platform specified in '{args}'.");
-
-                return null;
-            }
-
-            var value = platformArg["--platform=".Length..];
-            if (Enum.TryParse<PlatformType>(value, ignoreCase: true, out var platform))
-            {
-                return platform;
-            }
-
-            NetConsole.WriteLine($"[Config] Unrecognised platform '{value}'.");
-
-            return null;
         }
 
         /// <summary>
