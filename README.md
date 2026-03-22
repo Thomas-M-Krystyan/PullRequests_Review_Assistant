@@ -8,7 +8,8 @@ PullRequests_Review_Assistant.sln
 ├── src/
 │   ├── PullRequests_Review_Assistant.Application/
 │   │   ├── Builders/
-│   │   │   ├── IReviewConfigurationBuilder.cs
+│   │   │   ├── Interface/
+│   │   │   │   └── IReviewConfigurationBuilder.cs
 │   │   │   └── ReviewConfigurationBuilder.cs
 │   │   ├── Commands/
 │   │   │   └── ConsoleCommandHandler.cs
@@ -46,7 +47,8 @@ PullRequests_Review_Assistant.sln
 │       │   ├── CopilotCodeReviewAgent.cs
 │       │   └── CopilotLanguageAgent.cs
 │       ├── Auth/
-│       │   ├── AuthStrategyFactory.cs
+│       │   └── Factory/
+│       │   │   └── AuthStrategyFactory.cs
 │       │   ├── BitbucketAuthStrategy.cs
 │       │   ├── GitHubAuthStrategy.cs
 │       │   └── GitLabAuthStrategy.cs
@@ -55,6 +57,8 @@ PullRequests_Review_Assistant.sln
 │       ├── Extensions/
 │       │   └── StringExtensions.cs
 │       ├── Platform/
+│       │   ├── Parent/
+│       │   │   └── McpPlatformServiceBase.cs 
 │       │   ├── BitbucketPlatformService.cs
 │       │   ├── GitHubPlatformService.cs
 │       │   └── GitLabPlatformService.cs
