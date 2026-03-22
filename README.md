@@ -1,4 +1,37 @@
-# PR Review Assistant
+# Pull Requests: Review Assistant
+
+## 1. Overview
+
+**PR Review Assistant** is a .NET 8 console application that automates AI-powered code reviews
+for pull requests hosted on popular source-control platforms. It leverages **GitHub Copilot SDK**
+agents via the **Model Context Protocol (MCP)** to analyse changed files and post structured
+review comments directly back to the pull request.
+
+### Supported Platforms
+
+| Platform      | Status                   |
+|---------------|--------------------------|
+| **GitHub**    | ✅ Implemented & tested  |
+| **GitLab**    | ⚠️ Implemented, untested |
+| **Bitbucket** | ⚠️ Implemented, untested |
+
+> **⚠️ NOTE:** Only the **GitHub** integration has been verified end-to-end.
+  GitLab and Bitbucket platform services are implemented and wired up,
+  but have **not been tested** and may require additional configuration.
+>  
+> **⚠️ NOTE:** Unit tests and integration tests are not yet implemented.
+>
+>  Use at your own risk and feel free to contribute improvements!
+
+### License
+
+This project is licensed under the [**MIT License**](LICENSE.txt). See the `LICENSE.txt` file for full terms.
+
+### Project Status
+
+> 🚧 **This project is currently in active development / proof-of-concept stage.**
+  The GitHub integration is functional and usable. GitLab and Bitbucket support
+  is scaffolded but unverified. APIs and CLI commands may change between versions.
 
 ---
 
@@ -166,10 +199,10 @@ dotnet run --project src/PullRequests_Review_Assistant.Console
 
 When prompted:
 
-| Prompt | Value |
-|--------|-------|
-| **Tier** | Your Copilot plan (e.g. `Free`, `Pro`, `Business`) |
-| **Platform** | `GitHub` |
+| Prompt       | Value                                              |
+|--------------|----------------------------------------------------|
+| **Tier**     | Your Copilot plan (e.g. `Free`, `Pro`, `Business`) |
+| **Platform** | `GitHub`                                           |
 
 #### Tier prompt example
 
