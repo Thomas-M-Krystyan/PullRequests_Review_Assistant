@@ -1,15 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>12.0</LangVersion>
+    <UserSecretsId>pr-review-assistant-local</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.5" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\PullRequests_Review_Assistant.Application\PullRequests_Review_Assistant.Application.csproj" />
     <ProjectReference Include="..\PullRequests_Review_Assistant.Infrastructure\PullRequests_Review_Assistant.Infrastructure.csproj" />
   </ItemGroup>
+	
   <ItemGroup>
     <None Update="model-config.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
