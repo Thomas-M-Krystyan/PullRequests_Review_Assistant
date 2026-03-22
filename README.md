@@ -206,7 +206,7 @@ When prompted:
 
 #### Tier prompt example
 
-```sh
+```
 [Config] No tier specified. Falling back to interactive selection.
 [Config] Select a Tier:
   [1] Free
@@ -220,7 +220,7 @@ Enter a number (1-6):
 
 #### Platform prompt example
 
-```sh
+```
 [Model] Using primary model: claude-opus-4.6
 [Config] No platform specified. Falling back to interactive selection.
 [Config] Select a Platform:
@@ -300,7 +300,7 @@ is configured in the application.
 
 #### Expected output in the console:
 
-```sh
+```
 [GitHub Auth] Authenticated successfully.
 
 ╔════════════════════════════════════════════════════════════════════╗
