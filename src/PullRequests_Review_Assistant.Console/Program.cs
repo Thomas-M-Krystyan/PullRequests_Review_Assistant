@@ -1,5 +1,7 @@
+using PullRequests_Review_Assistant.Application.Builders;
 using PullRequests_Review_Assistant.Application.Commands;
 using PullRequests_Review_Assistant.Application.Services;
+using PullRequests_Review_Assistant.Application.Utilities;
 using PullRequests_Review_Assistant.Domain.Enums;
 using PullRequests_Review_Assistant.Domain.Interfaces;
 using PullRequests_Review_Assistant.Infrastructure.Agents;
@@ -8,7 +10,6 @@ using PullRequests_Review_Assistant.Infrastructure.Configuration;
 using PullRequests_Review_Assistant.Infrastructure.Platform;
 using PullRequests_Review_Assistant.Infrastructure.Secrets;
 using System.Text;
-using PullRequests_Review_Assistant.Application.Utilities;
 using NetConsole = System.Console;  // There is a name conflict between System.Console and PullRequests_Review_Assistant.Console namespace
 
 namespace PullRequests_Review_Assistant.Console
@@ -61,9 +62,12 @@ namespace PullRequests_Review_Assistant.Console
                 var orchestrator = new CodeReviewOrchestrator(
                     codeReviewAgent, languageAgent, platform);
 
+                // Review builder
+                var reviewBuilder = new ReviewConfigurationBuilder();
+
                 // Console UI
                 var commandHandler = new ConsoleCommandHandler(
-                    orchestrator, languageAgent, codeReviewAgent);
+                    orchestrator, languageAgent, codeReviewAgent, reviewBuilder);
 
                 await commandHandler.RunAsync(cts.Token);
 

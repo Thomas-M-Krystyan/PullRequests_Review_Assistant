@@ -1,4 +1,4 @@
-using PullRequests_Review_Assistant.Application.Builders;
+using PullRequests_Review_Assistant.Application.Builders.Interfaces;
 using PullRequests_Review_Assistant.Application.Services;
 using PullRequests_Review_Assistant.Application.Utilities;
 using PullRequests_Review_Assistant.Domain.Enums;
@@ -22,6 +22,7 @@ namespace PullRequests_Review_Assistant.Application.Commands
         private readonly CodeReviewOrchestrator _orchestrator;
         private readonly ILanguageAgent _languageAgent;
         private readonly ICodeReviewAgent _codeReviewAgent;
+        private readonly IReviewConfigurationBuilder _reviewBuilder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConsoleCommandHandler"/> class.
@@ -30,14 +31,17 @@ namespace PullRequests_Review_Assistant.Application.Commands
         /// <param name="orchestrator">The orchestrator.</param>
         /// <param name="languageAgent">The language agent.</param>
         /// <param name="codeReviewAgent">The code review agent.</param>
+        /// <param name="reviewBuilder">The review configuration builder.</param>
         public ConsoleCommandHandler(
             CodeReviewOrchestrator orchestrator,
             ILanguageAgent languageAgent,
-            ICodeReviewAgent codeReviewAgent)
+            ICodeReviewAgent codeReviewAgent,
+            IReviewConfigurationBuilder reviewBuilder)
         {
             _orchestrator = orchestrator;
             _languageAgent = languageAgent;
             _codeReviewAgent = codeReviewAgent;
+            _reviewBuilder = reviewBuilder;
         }
 
         /// <summary>
@@ -100,7 +104,6 @@ namespace PullRequests_Review_Assistant.Application.Commands
             try
             {
                 var inputParts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                var reviewBuilder = new ReviewConfigurationBuilder();
 
                 // Parse: review <platform> <owner> <repo> <pr-id> [options...]
                 if (inputParts.Length < 5)
@@ -123,7 +126,7 @@ namespace PullRequests_Review_Assistant.Application.Commands
                 var platformType = ConsolePrompt.ParseArg<PlatformType>([$"--platform={platform}"], "platform")
                                    ?? throw new ArgumentException($"Invalid platform: {platform}");
 
-                reviewBuilder.ForPlatform(platformType)
+                _reviewBuilder.ForPlatform(platformType)
                     .ForRepository(owner: owner, name: name)
                     .ForPullRequest(int.Parse(pullRequestId));
 
@@ -133,34 +136,34 @@ namespace PullRequests_Review_Assistant.Application.Commands
                     var reviewOption = inputParts[index].ToLowerInvariant();
                     _ = reviewOption switch
                     {
-                        "--2fa"         => reviewBuilder.WithTwoFactorAuth(),
-                        "--formatting"  => reviewBuilder.IncludeCodeFormatting(),
-                        "--linting"     => reviewBuilder.IncludeLinting(),
-                        "--copyrights"  => reviewBuilder.IncludeCopyrights(),
-                        "--docs"        => reviewBuilder.IncludeDocumentation(),
-                        "--naming"      => reviewBuilder.IncludeNaming(),
-                        "--errors"      => reviewBuilder.IncludeErrorHandling(),
-                        "--concurrency" => reviewBuilder.IncludeConcurrency(),
-                        "--testing"     => reviewBuilder.IncludeTesting(),
-                        "--deps"        => reviewBuilder.IncludeDependencyManagement(),
-                        "--a11y"        => reviewBuilder.IncludeAccessibility(),
-                        "--logging"     => reviewBuilder.IncludeLogging(),
-                        "--secrets"     => reviewBuilder.IncludeHardcodedSecrets(),
-                        "--deadcode"    => reviewBuilder.IncludeDeadCode(),
-                        "--complexity"  => reviewBuilder.IncludeComplexity(),
-                        "--duplicates"  => reviewBuilder.IncludeDuplicateCode(),
-                        "--api"         => reviewBuilder.IncludeApiDesign(),
-                        "--all"         => reviewBuilder.IncludeAll(),
+                        "--2fa"         => _reviewBuilder.WithTwoFactorAuth(),
+                        "--formatting"  => _reviewBuilder.IncludeCodeFormatting(),
+                        "--linting"     => _reviewBuilder.IncludeLinting(),
+                        "--copyrights"  => _reviewBuilder.IncludeCopyrights(),
+                        "--docs"        => _reviewBuilder.IncludeDocumentation(),
+                        "--naming"      => _reviewBuilder.IncludeNaming(),
+                        "--errors"      => _reviewBuilder.IncludeErrorHandling(),
+                        "--concurrency" => _reviewBuilder.IncludeConcurrency(),
+                        "--testing"     => _reviewBuilder.IncludeTesting(),
+                        "--deps"        => _reviewBuilder.IncludeDependencyManagement(),
+                        "--a11y"        => _reviewBuilder.IncludeAccessibility(),
+                        "--logging"     => _reviewBuilder.IncludeLogging(),
+                        "--secrets"     => _reviewBuilder.IncludeHardcodedSecrets(),
+                        "--deadcode"    => _reviewBuilder.IncludeDeadCode(),
+                        "--complexity"  => _reviewBuilder.IncludeComplexity(),
+                        "--duplicates"  => _reviewBuilder.IncludeDuplicateCode(),
+                        "--api"         => _reviewBuilder.IncludeApiDesign(),
+                        "--all"         => _reviewBuilder.IncludeAll(),
 
                         // Language option
-                        _ when reviewOption.StartsWith("--lang=") => reviewBuilder.WithLanguage(reviewOption["--lang=".Length..]),
+                        _ when reviewOption.StartsWith("--lang=") => _reviewBuilder.WithLanguage(reviewOption["--lang=".Length..]),
 
                         // Unrecognized option
                         _ => throw new ArgumentException($"Unknown option: {reviewOption}")
                     };
                 }
 
-                var reviewConfiguration = reviewBuilder.Build();
+                var reviewConfiguration = _reviewBuilder.Build();
 
                 Console.WriteLine($"[Review] Starting review for {reviewConfiguration.Platform} " +
                                   $"{reviewConfiguration.RepositoryOwner}/{reviewConfiguration.RepositoryName} PR #{reviewConfiguration.PullRequestId}");
