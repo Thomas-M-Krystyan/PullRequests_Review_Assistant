@@ -4,6 +4,8 @@ using PullRequests_Review_Assistant.Domain.Entities;
 using PullRequests_Review_Assistant.Domain.Interfaces;
 using PullRequests_Review_Assistant.Infrastructure.Extensions;
 
+#pragma warning disable IDE0290  // Disable warnings about using primary constructors
+
 namespace PullRequests_Review_Assistant.Infrastructure.Platform
 {
     /// <summary>
@@ -12,16 +14,55 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
     /// </summary>
     public sealed class BitbucketPlatformService : IRepositoryPlatformService, IAsyncDisposable
     {
-        private const string PlatformName = "BitBucket";
+        private const string PlatformName = "Bitbucket";
+        private const string UsernameEnvVar = "BITBUCKET_USERNAME";
+        private const string AppPasswordEnvVar = "BITBUCKET_APP_PASSWORD";
+
+        private readonly IAuthStrategy _authStrategy;
 
         private IMcpClient? _mcpClient;  // TODO: Extract to parent
 
         /// <summary>
-        /// Initializes the MCP client connected to the Bitbucket MCP server.
-        /// Requires BITBUCKET_APP_PASSWORD environment variable.
+        /// Initializes a new instance of the <see cref="BitbucketPlatformService"/> class.
         /// </summary>
-        public async Task InitializeAsync(CancellationToken cancellationToken = default)
+        ///
+        /// <param name="authStrategy">
+        /// The authentication strategy used to resolve Bitbucket credentials.
+        /// Must return credentials in <c>username:app-password</c> format.
+        /// </param>
+        public BitbucketPlatformService(IAuthStrategy authStrategy)
         {
+            _authStrategy = authStrategy;
+        }
+
+        /// <summary>
+        /// Resolves Bitbucket credentials via the auth strategy, sets the environment
+        /// variables expected by the MCP server, then starts the MCP client.
+        /// </summary>
+        /// 
+        /// <param name="requiresTwoFactor">Whether two-factor authentication is required.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <exception cref="ArgumentException"/>
+        public async Task InitializeAsync(bool requiresTwoFactor = false, CancellationToken cancellationToken = default)
+        {
+            var credentials = await _authStrategy.AuthenticateAsync(requiresTwoFactor, cancellationToken);
+
+            // BitbucketAuthStrategy returns "username:app-password" — split on first colon only
+            var separatorIndex = credentials.IndexOf(':', StringComparison.Ordinal);
+
+            if (separatorIndex < 0)
+            {
+                throw new ArgumentException(
+                    "Bitbucket credentials must be in 'username:app-password' format.");
+            }
+
+            var username = credentials[..separatorIndex];
+            var appPassword = credentials[(separatorIndex + 1)..];
+
+            // The MCP Bitbucket server reads credentials from these environment variables
+            Environment.SetEnvironmentVariable(UsernameEnvVar, username);
+            Environment.SetEnvironmentVariable(AppPasswordEnvVar, appPassword);
+
             _mcpClient = await McpClientFactory.CreateAsync(
                 new StdioClientTransport(
                     new StdioClientTransportOptions
@@ -83,7 +124,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
             if (_mcpClient is not null)
             {
                 await _mcpClient.DisposeAsync();
-                
+
                 // Clear reference after disposal (prevents ObjectDisposedException on subsequent calls)
                 _mcpClient = null;
             }
@@ -97,7 +138,8 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
         {
             if (_mcpClient is null)
             {
-                throw new InvalidOperationException($"{PlatformName} MCP client not initialized. Call {nameof(InitializeAsync)} first.");
+                throw new InvalidOperationException(
+                    $"{PlatformName} MCP client not initialized. Call {nameof(InitializeAsync)} first.");
             }
         }
     }

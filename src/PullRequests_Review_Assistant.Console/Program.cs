@@ -29,19 +29,7 @@ namespace PullRequests_Review_Assistant.Console
 
             using var cts = new CancellationTokenSource();
 
-            ConsoleCancelEventHandler handler = (_, consoleCancelEventArgs) =>
-            {
-                consoleCancelEventArgs.Cancel = true;
-
-                // ReSharper disable AccessToDisposedClosure
-                if (!cts.IsCancellationRequested)
-                {
-                    cts.Cancel();
-                }
-                // ReSharper restore AccessToDisposedClosure
-            };
-
-            NetConsole.CancelKeyPress += handler;
+            NetConsole.CancelKeyPress += HandleCancelKeyPress;
 
             try
             {
@@ -83,13 +71,28 @@ namespace PullRequests_Review_Assistant.Console
             }
             finally
             {
-                NetConsole.CancelKeyPress -= handler;
+                NetConsole.CancelKeyPress -= HandleCancelKeyPress;
+            }
+
+            return;
+
+            // Local function to handle Ctrl+C gracefully
+            void HandleCancelKeyPress(object? sender, ConsoleCancelEventArgs consoleCancelEventArgs)
+            {
+                consoleCancelEventArgs.Cancel = true;
+
+                // ReSharper disable AccessToDisposedClosure
+                if (!cts.IsCancellationRequested)
+                {
+                    cts.Cancel();
+                }
+                // ReSharper restore AccessToDisposedClosure
             }
         }
 
         private static SubscriptionTier ParseSubscriptionTier(string[] args)
         {
-            var tierArg = args.FirstOrDefault(a => a.StartsWith("--tier=", StringComparison.OrdinalIgnoreCase));
+            var tierArg = args.FirstOrDefault(line => line.StartsWith("--tier=", StringComparison.OrdinalIgnoreCase));
 
             if (tierArg is not null)
             {
