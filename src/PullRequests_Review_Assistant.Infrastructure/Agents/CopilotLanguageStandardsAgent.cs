@@ -10,7 +10,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Agents
     /// the most recent and recommended coding standards for a given language,
     /// then formats them as a system prompt enrichment for the code review agent.
     /// </summary>
-    public sealed class CopilotLanguageStandardsAgent : ILanguageStandardsAgent, IAsyncDisposable  // TODO: Rename to LanguageStandardsAgent
+    public sealed class CopilotLanguageStandardsAgent : ILanguageStandardsAgent, IAsyncDisposable
     {
         private readonly CopilotClient _copilotClient;
         private AIAgent? _agent;
