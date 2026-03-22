@@ -16,9 +16,8 @@ namespace PullRequests_Review_Assistant.Domain.Interfaces
         /// Must be called once before any other method on this service.
         /// </summary>
         ///
-        /// <param name="requiresTwoFactor">Whether two-factor authentication is required.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        Task InitializeAsync(bool requiresTwoFactor = false, CancellationToken cancellationToken = default);
+        Task InitializeAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Fetches all changed files in the pull request.

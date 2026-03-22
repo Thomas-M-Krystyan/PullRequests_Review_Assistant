@@ -29,14 +29,14 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform.Parent
             get
             {
                 EnsureInitialized();
-                
+
                 return _mcpClient!;
             }
         }
 
         #region Abstract methods
         /// <inheritdoc />
-        public abstract Task InitializeAsync(bool requiresTwoFactor = false, CancellationToken cancellationToken = default);
+        public abstract Task InitializeAsync(CancellationToken cancellationToken = default);
 
         /// <inheritdoc />
         public abstract Task<IReadOnlyList<PullRequestFile>> GetPullRequestFilesAsync(

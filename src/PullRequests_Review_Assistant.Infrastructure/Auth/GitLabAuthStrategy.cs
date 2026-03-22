@@ -6,8 +6,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Auth
 {
     /// <summary>
     /// GitLab authentication strategy.
-    /// Uses a personal access token from Azure Key Vault,
-    /// with optional OAuth2 device-flow for 2FA.
+    /// Uses a personal access token from Azure Key Vault.
     /// </summary>
     public sealed class GitLabAuthStrategy : IAuthStrategy
     {
@@ -24,24 +23,9 @@ namespace PullRequests_Review_Assistant.Infrastructure.Auth
         }
 
         /// <inheritdoc />
-        /// <exception cref="ArgumentException"/>
-        public async Task<string> AuthenticateAsync(bool requiresTwoFactor, CancellationToken cancellationToken = default)
+        public async Task<string> AuthenticateAsync(CancellationToken cancellationToken = default)
         {
             var token = await _secrets.GetSecretAsync("gitlab-pat", cancellationToken);
-
-            if (requiresTwoFactor)
-            {
-                Console.WriteLine("[GitLab Auth] Two-factor authentication required.");
-                Console.Write("[GitLab Auth] Enter your 2FA code: ");
-                var code = Console.ReadLine()?.Trim();
-
-                if (string.IsNullOrWhiteSpace(code))
-                {
-                    throw new ArgumentException("2FA code is required.");
-                }
-
-                Console.WriteLine("[GitLab Auth] 2FA validated (simulated).");
-            }
 
             Console.WriteLine("[GitLab Auth] Authenticated successfully.");
             Console.WriteLine();

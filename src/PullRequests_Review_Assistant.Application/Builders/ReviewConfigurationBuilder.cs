@@ -22,7 +22,6 @@ namespace PullRequests_Review_Assistant.Application.Builders
         private string _repoOwner = string.Empty;
         private string _repoName = string.Empty;
         private int _pullRequestId;
-        private bool _twoFactor;
 
         // Language-specific standards
         private string _language = string.Empty;
@@ -48,14 +47,6 @@ namespace PullRequests_Review_Assistant.Application.Builders
         public IReviewConfigurationBuilder ForPullRequest(int pullRequestId)
         {
             _pullRequestId = pullRequestId;
-
-            return this;
-        }
-
-        /// <inheritdoc />
-        public IReviewConfigurationBuilder WithTwoFactorAuth()
-        {
-            _twoFactor = true;
 
             return this;
         }
@@ -215,7 +206,6 @@ namespace PullRequests_Review_Assistant.Application.Builders
                             RepositoryOwner = _repoOwner,
                             RepositoryName = _repoName,
                             PullRequestId = _pullRequestId,
-                            RequiresTwoFactorAuth = _twoFactor,
                             TargetLanguage = _language
                         };
         }

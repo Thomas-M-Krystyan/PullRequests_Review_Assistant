@@ -105,14 +105,14 @@ namespace PullRequests_Review_Assistant.Application.Commands
             {
                 var inputParts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-                // Parse: review <platform> <repositoryOwner> <repo> <pr-id> [options...]
+                // Parse: review <platform> <owner> <repo> <pr-id> [options...]
                 if (inputParts.Length < 5)
                 {
-                    Console.WriteLine("Usage: review <github|gitlab|bitbucket> <repositoryOwner> <repo> <pr-id> [options]");
-                    Console.WriteLine("Options: --2fa --lang=<language> --formatting --linting --copyrights");
+                    Console.WriteLine("Usage: review <github|gitlab|bitbucket> <owner> <repo> <pr-id> [options]");
+                    Console.WriteLine("Options: --lang=<language> --formatting --linting --copyrights");
                     Console.WriteLine("         --docs --naming --errors --concurrency --testing --deps");
                     Console.WriteLine("         --a11y --logging --secrets --deadcode --complexity --duplicates");
-                    Console.WriteLine("         --api --area=<ReviewArea> --all");
+                    Console.WriteLine("         --api --all --area=<ReviewArea>");
 
                     return;
                 }
@@ -136,7 +136,6 @@ namespace PullRequests_Review_Assistant.Application.Commands
                     var reviewOption = inputParts[index].ToLowerInvariant();
                     _ = reviewOption switch
                     {
-                        "--2fa"         => _reviewBuilder.WithTwoFactorAuth(),
                         "--formatting"  => _reviewBuilder.IncludeCodeFormatting(),
                         "--linting"     => _reviewBuilder.IncludeLinting(),
                         "--copyrights"  => _reviewBuilder.IncludeCopyrights(),

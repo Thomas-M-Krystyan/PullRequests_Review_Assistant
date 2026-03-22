@@ -39,11 +39,6 @@ namespace PullRequests_Review_Assistant.Application.Builders.Interface
         IReviewConfigurationBuilder ForPullRequest(int pullRequestId);
 
         /// <summary>
-        /// Enables second-step authorization.
-        /// </summary>
-        IReviewConfigurationBuilder WithTwoFactorAuth();
-
-        /// <summary>
         /// Sets the target programming language for standards lookup.
         /// </summary>
         /// 
