@@ -33,15 +33,15 @@ namespace PullRequests_Review_Assistant.Infrastructure.Auth.Factory
         /// The authentication strategy for the specified platform.
         /// </returns>
         ///
-        /// <exception cref="ArgumentException"/>
+        /// <exception cref="NotImplementedException"/>
         public IAuthStrategy Create(PlatformType platform) => platform switch
         {
             PlatformType.GitHub => new GitHubAuthStrategy(_secrets),
             PlatformType.GitLab => new GitLabAuthStrategy(_secrets),
             PlatformType.Bitbucket => new BitbucketAuthStrategy(_secrets),
 
-            // NOTE: Unsupported platforms should be caught at configuration time
-            _ => throw new ArgumentException($"Unsupported platform: {platform}", nameof(platform))
+            // Unsupported platform
+            _ => throw new NotImplementedException($"Unsupported platform: {platform}")
         };
     }
 }
