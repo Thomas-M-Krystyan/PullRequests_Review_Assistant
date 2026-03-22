@@ -47,8 +47,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Agents
         {
             await _copilotClient.StartAsync(cancellationToken);
 
-            _agent = _copilotClient.AsAIAgent(
-                instructions: BuildFullSystemPrompt(ReviewArea.CoreReview));
+            _agent = CreateAgent(BuildFullSystemPrompt(ReviewArea.CoreReview));
         }
 
         /// <inheritdoc />
@@ -57,8 +56,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Agents
             _additionalPrompt = additionalPrompt;
 
             // Recreate agent with updated instructions
-            _agent = _copilotClient.AsAIAgent(
-                instructions: BuildFullSystemPrompt(ReviewArea.CoreReview) + _additionalPrompt);
+            _agent = CreateAgent(BuildFullSystemPrompt(ReviewArea.CoreReview) + _additionalPrompt);
         }
 
         /// <inheritdoc />
@@ -75,7 +73,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Agents
             var fullPrompt = systemPrompt + _additionalPrompt;
 
             // Reconstruct agent with current review areas
-            _agent = _copilotClient.AsAIAgent(instructions: fullPrompt);
+            _agent = CreateAgent(fullPrompt);
 
             var userPrompt = $"""
                               Review the following file diff from a pull request.
@@ -102,6 +100,29 @@ namespace PullRequests_Review_Assistant.Infrastructure.Agents
         public async ValueTask DisposeAsync()
         {
             await _copilotClient.DisposeAsync();
+        }
+
+        /// <summary>
+        /// Creates an <see cref="AIAgent"/> pinned to <see cref="_modelId"/> with the given instructions.
+        /// </summary>
+        /// 
+        /// <remarks>
+        /// The GitHub Copilot SDK selects the model via the <c>GITHUB_COPILOT_MODEL</c>
+        /// environment variable. The variable is set here before every agent creation to
+        /// guarantee the correct model is used even if the environment has changed since
+        /// construction.
+        /// </remarks>
+        /// 
+        /// <param name="instructions">The system prompt instructions for the agent.</param>
+        /// 
+        /// <returns>
+        /// A new <see cref="AIAgent"/> instance.
+        /// </returns>
+        private AIAgent CreateAgent(string instructions)
+        {
+            Environment.SetEnvironmentVariable("GITHUB_COPILOT_MODEL", _modelId);
+
+            return _copilotClient.AsAIAgent(instructions: instructions);
         }
 
         /// <summary>
