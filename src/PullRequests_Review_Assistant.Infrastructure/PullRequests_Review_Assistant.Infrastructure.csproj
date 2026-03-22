@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Agents.AI.GitHub.Copilot" Version="1.0.0-preview.260311.1" />
+	<PackageReference Include="GitHub.Copilot.SDK" Version="0.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.5" />
     <PackageReference Include="ModelContextProtocol" Version="1.1.0" />
     <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.9.0" />

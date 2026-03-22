@@ -60,10 +60,7 @@ namespace PullRequests_Review_Assistant.Console
 
                 // Agents
                 var codeReviewAgent = new CopilotCodeReviewAgent(resolvedModel);
-                await codeReviewAgent.InitializeAsync(cts.Token);
-
                 var languageAgent = new CopilotLanguageStandardsAgent();
-                await languageAgent.InitializeAsync(cts.Token);
 
                 // Orchestrator
                 var orchestrator = new CodeReviewOrchestrator(
