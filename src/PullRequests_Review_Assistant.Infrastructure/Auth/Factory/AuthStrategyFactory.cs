@@ -3,7 +3,7 @@ using PullRequests_Review_Assistant.Domain.Interfaces;
 
 #pragma warning disable IDE0290  // Disable warnings about using primary constructors
 
-namespace PullRequests_Review_Assistant.Infrastructure.Auth
+namespace PullRequests_Review_Assistant.Infrastructure.Auth.Factory
 {
     /// <summary>
     /// Factory that selects the correct <see cref="IAuthStrategy"/>

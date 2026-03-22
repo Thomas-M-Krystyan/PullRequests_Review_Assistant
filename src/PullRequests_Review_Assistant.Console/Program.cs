@@ -5,7 +5,7 @@ using PullRequests_Review_Assistant.Application.Utilities;
 using PullRequests_Review_Assistant.Domain.Enums;
 using PullRequests_Review_Assistant.Domain.Interfaces;
 using PullRequests_Review_Assistant.Infrastructure.Agents;
-using PullRequests_Review_Assistant.Infrastructure.Auth;
+using PullRequests_Review_Assistant.Infrastructure.Auth.Factory;
 using PullRequests_Review_Assistant.Infrastructure.Configuration;
 using PullRequests_Review_Assistant.Infrastructure.Platform;
 using PullRequests_Review_Assistant.Infrastructure.Secrets;
