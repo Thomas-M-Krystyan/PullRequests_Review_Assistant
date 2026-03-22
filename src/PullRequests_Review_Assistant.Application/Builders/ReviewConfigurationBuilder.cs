@@ -1,3 +1,4 @@
+using PullRequests_Review_Assistant.Application.Builders.Interfaces;
 using PullRequests_Review_Assistant.Domain.Enums;
 using PullRequests_Review_Assistant.Domain.ValueObjects;
 
@@ -13,12 +14,17 @@ namespace PullRequests_Review_Assistant.Application.Builders
     /// </remarks>
     public sealed class ReviewConfigurationBuilder : IReviewConfigurationBuilder
     {
+        // Core review area
         private ReviewArea _areas = ReviewArea.CoreReview;
+
+        // Platform and repository details
         private PlatformType _platform;
         private string _owner = string.Empty;
         private string _repoName = string.Empty;
         private int _pullRequestId;
         private bool _twoFactor;
+
+        // Language-specific standards
         private string _language = string.Empty;
 
         /// <inheritdoc />

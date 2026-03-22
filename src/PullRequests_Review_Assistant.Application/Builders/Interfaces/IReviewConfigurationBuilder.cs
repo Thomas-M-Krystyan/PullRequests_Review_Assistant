@@ -1,7 +1,7 @@
 using PullRequests_Review_Assistant.Domain.Enums;
 using PullRequests_Review_Assistant.Domain.ValueObjects;
 
-namespace PullRequests_Review_Assistant.Application.Builders
+namespace PullRequests_Review_Assistant.Application.Builders.Interfaces
 {
     /// <summary>
     /// Fluent builder interface for constructing a <see cref="ReviewConfiguration"/>.
