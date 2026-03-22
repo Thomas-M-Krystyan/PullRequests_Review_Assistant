@@ -56,9 +56,56 @@ Before running the application against a GitHub repository, ensure the following
   ```powershell
   Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
   ```
+
   </details>
 
 - **GitHub Copilot subscription** — the application uses GitHub Copilot SDK agents
+
+- **GitHub Personal Access Token (PAT)** — required for authenticating with GitHub to read PR files and post review comments
+
+- **GitHub Copilot CLI** — the application relies on the `copilot` command-line tool to run the MCP server locally, which is used for processing reviews via Copilot agents
+
+  <details>
+
+  - Install via [https://github.com/github/cli/releases](https://github.com/github/cli/releases)
+  - or from the terminal:
+
+    **Windows** (via [Winget](https://learn.microsoft.com/windows/package-manager/winget/)):
+
+    ```sh
+    winget install GitHub.cli
+    ```
+
+    **Windows** (via [Chocolatey](https://chocolatey.org/)):
+
+    ```sh
+    choco install gh
+    ```
+
+    **macOS** (via [Homebrew](https://brew.sh/)):
+
+    ```sh
+    brew install gh
+    ```
+
+    **Linux** (Debian/Ubuntu):
+
+    ```sh
+    sudo apt install gh
+    ```
+
+  - After installation, verify with:
+
+    ```sh
+    copilot --version
+    ```
+    
+    ##### Resources
+
+    - [**GitHub Docs:** Installing GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-cli) - Guide on how to install **GitHub Copilot CLI**
+    - [**GitHub Docs:** Using GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-copilot-cli) - Guide on how to use **GitHub Copilot CLI**
+
+  </details>
 
 ---
 
@@ -154,31 +201,95 @@ Once at the `>` prompt, use the `review` command:
 review <Platform> <Your-GitHub-Name> <Repository-Name> <Pull-Request-Id> [options]
 ```
 
-**Minimal example** — core areas only (Performance, Architecture, Vulnerabilities, Code Smells):
+- **Platform:** GitHub, github, or similar
+- **Your-GitHub-Name:** the alias appearing after "https://github.com/" in the URL of your repository, for example "Thomas-M-Krystyan"
+- **Repository-Name:** the name of your repository (not the full URL), for example: "PullRequest_Review_Assistant"
+- **Pull-Request-Id:** the numeric ID of the pull request, which can be found in the URL of the PR after "https://github.com/owner_name/repository_name/pull/", for example: "123"
+- **Options:** will be displayed in the console if you type `--help`, `--h` or `-h`</br>
+  Most of the review options can be combined using bitwise flags: --x --y => (x, y)</br>
+  or by `--area=` where grouped categories are defined (e.g. `--area=CoreReview`).
+
+  > Check the file [ReviewArea.cs](src/PullRequests_Review_Assistant.Domain/Enums/ReviewArea.cs) for more details.
+
+##### Language proficiency
+
+You can specify the target programming language used for core review by:
+
+- passing `--lang=<language>` command argument (e.g. `--lang=C#`) to the used for the current review
+- passing `language <language>` command argument (e.g. `language Python`) which will be used as a global
+  agent setting for all subsequent reviews in the current session until changed again or reset
+- skip both, and let the system infer the language(s) from the PR files (based on their extensions) — this
+  may however lead to less accurate reviews if the language cannot be confidently determined (e.g., code
+  snippets placed in plane text or markup files)
+
+##### Examples of usage
+
+- **Minimal example** — the default core review areas:
 
 ```sh
-review github <Your-GitHub-Name> <Repository-Name> <Pull-Request-Id> --lang=C# --areas=CoreReview
+review github John-Smith Calculator_App 1 --lang=C# --areas=CoreReview
 ```
 
-> **NOTE:** `CoreReview` is a shorthand for the main review areas: Performance, Architecture, Vulnerabilities, and Code Smells.
+> **NOTE:** `CoreReview` is a shorthand for the main review areas: Performance, Architecture, Vulnerabilities,
+  and Code Smells (so you don't have to specify each one separately). This specific review area can be also
+  skipped since it's a default configuration for reviews, but it's included here for demonstration purposes.
 
-**Targeted example** — specific areas only:
+- **Targeted example** — specific areas only:
 
 ```sh
-review github <Your-GitHub-Name> <Repository-Name> <Pull-Request-Id> --lang=C# --docs --naming --errors
+review github SamanthaB_97 ImageProcessingRepo 37 --lang=Python --docs --naming --errors
 ```
 
-**Full example** — all areas and suggestions:
+- **Full example** — all areas and suggestions:
 
 ```sh
-review github <Your-GitHub-Name> <Repository-Name> <Pull-Request-Id> --lang=C# --all
+review GitHub WiseCompany alpha-Communication_Platform 8514 --all
 ```
 
 Review comments are automatically **posted back to the GitHub pull request** upon completion.
 
-All review areas will be displayed in the console if you type:
+The review comments are posted under the credentials of the GitHub user whose Personal Access Token (PAT)
+is configured in the application.
 
-`--help` or `-h` or `--h`
+---
+
+#### Expected output in the console:
+
+```sh
+[GitHub Auth] Authenticated successfully.
+
+╔════════════════════════════════════════════════════════════════════╗
+║                  PR Review Assistant — Commands                    ║
+╠════════════════════════════════════════════════════════════════════╣
+...
+...
+
+║  exit / quit        Exit the application                           ║
+╚════════════════════════════════════════════════════════════════════╝
+
+> review GitHub Thomas-M-Krystyan PullRequests_Review_Assistant 1 --all
+
+[Review] Starting review for GitHub Thomas-M-Krystyan/PullRequests_Review_Assistant PR #1
+[Review] Areas: All
+[Orchestrator] Found 1 file(s) to review.
+[Orchestrator] Reviewing: [
+  {
+    "sha": "f3c9b7a1e4d28c5f0d91ab7c42ef89d12b7e3c6a",
+    "filename": "README.md",
+    "status": "modified",
+    "additions": 190,
+    "deletions": 1,
+    "changes": 191,
+    "blob_url": ...
+  },
+  {...}
+]
+[Orchestrator] Total comments generated: 5
+[Orchestrator] All comments posted successfully.
+[Review] Completed with 5 comment(s).
+
+>
+```
 
 ---
 
