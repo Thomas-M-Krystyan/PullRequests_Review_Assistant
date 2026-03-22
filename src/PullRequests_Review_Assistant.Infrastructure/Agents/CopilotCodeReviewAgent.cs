@@ -7,8 +7,6 @@ using PullRequests_Review_Assistant.Domain.Templates;
 using PullRequests_Review_Assistant.Domain.ValueObjects;
 using System.Text.Json;
 
-#pragma warning disable IDE0290  // Disable warnings about using primary constructors
-
 namespace PullRequests_Review_Assistant.Infrastructure.Agents
 {
     /// <summary>
