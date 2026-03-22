@@ -112,6 +112,32 @@ When prompted:
 | **Tier** | Your Copilot plan (e.g. `Free`, `Pro`, `Business`) |
 | **Platform** | `GitHub` |
 
+#### Tier prompt example
+
+```sh
+[Config] No tier specified. Falling back to interactive selection.
+[Config] Select a Tier:
+  [1] Free
+  [2] Student
+  [3] Pro
+  [4] ProPlus
+  [5] Business
+  [6] Enterprise
+Enter a number (1-6):
+```
+
+#### Platform prompt example
+
+```sh
+[Model] Using primary model: claude-opus-4.6
+[Config] No platform specified. Falling back to interactive selection.
+[Config] Select a Platform:
+  [1] GitHub
+  [2] GitLab
+  [3] Bitbucket
+Enter a number (1-3):
+```
+
 > **NOTE:** Both prompts can be skipped by passing arguments directly:
 
 ```sh
