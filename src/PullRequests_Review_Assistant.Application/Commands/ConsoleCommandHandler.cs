@@ -63,7 +63,7 @@ namespace PullRequests_Review_Assistant.Application.Commands
                     continue;
                 }
 
-                if (input is "--help" or "-h" or "--h")
+                if (input is "--help" or "--h" or "-h")
                 {
                     PrintHelp();
                     continue;
@@ -222,6 +222,7 @@ namespace PullRequests_Review_Assistant.Application.Commands
             Console.OutputEncoding = Encoding.UTF8;  // Ensure proper rendering of box-drawing characters
 
             Console.WriteLine("""
+                              
                               ╔════════════════════════════════════════════════════════════════════╗
                               ║                  PR Review Assistant — Commands                    ║
                               ╠════════════════════════════════════════════════════════════════════╣
