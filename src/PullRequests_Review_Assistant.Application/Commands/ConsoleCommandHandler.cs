@@ -1,9 +1,9 @@
+using PullRequests_Review_Assistant.Application.Builders.Interface;
 using PullRequests_Review_Assistant.Application.Services;
 using PullRequests_Review_Assistant.Application.Utilities;
 using PullRequests_Review_Assistant.Domain.Enums;
 using PullRequests_Review_Assistant.Domain.Interfaces;
 using System.Text;
-using PullRequests_Review_Assistant.Application.Builders.Interface;
 
 #pragma warning disable IDE0290  // Disable warnings about using primary constructors
 
@@ -118,8 +118,8 @@ namespace PullRequests_Review_Assistant.Application.Commands
                 }
 
                 var platform = inputParts[1];
-                var owner = inputParts[2];
-                var name = inputParts[3];
+                var repositoryOwner = inputParts[2];
+                var repositoryName = inputParts[3];
                 var pullRequestId = inputParts[4];
 
                 // Use ConsolePrompt.ParseArg for platform parsing
@@ -127,7 +127,7 @@ namespace PullRequests_Review_Assistant.Application.Commands
                                    ?? throw new ArgumentException($"Invalid platform: {platform}");
 
                 _reviewBuilder.ForPlatform(platformType)
-                    .ForRepository(repositoryOwner: owner, name: name)
+                    .ForRepository(repositoryOwner, repositoryName)
                     .ForPullRequest(int.Parse(pullRequestId));
 
                 // Parse optional flags

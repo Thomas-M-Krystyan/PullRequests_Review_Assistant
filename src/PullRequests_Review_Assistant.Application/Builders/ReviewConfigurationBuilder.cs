@@ -19,7 +19,7 @@ namespace PullRequests_Review_Assistant.Application.Builders
 
         // Platform and repository details
         private PlatformType _platform;
-        private string _owner = string.Empty;
+        private string _repoOwner = string.Empty;
         private string _repoName = string.Empty;
         private int _pullRequestId;
         private bool _twoFactor;
@@ -36,10 +36,10 @@ namespace PullRequests_Review_Assistant.Application.Builders
         }
 
         /// <inheritdoc />
-        public IReviewConfigurationBuilder ForRepository(string repositoryOwner, string name)
+        public IReviewConfigurationBuilder ForRepository(string repositoryOwner, string repositoryName)
         {
-            _owner = repositoryOwner;
-            _repoName = name;
+            _repoOwner = repositoryOwner;
+            _repoName = repositoryName;
 
             return this;
         }
@@ -128,7 +128,7 @@ namespace PullRequests_Review_Assistant.Application.Builders
         /// <exception cref="ArgumentException"/>
         public ReviewConfiguration Build()
         {
-            if (string.IsNullOrWhiteSpace(_owner))
+            if (string.IsNullOrWhiteSpace(_repoOwner))
             {
                 throw new ArgumentException("Repository owner is required.");
             }
@@ -147,7 +147,7 @@ namespace PullRequests_Review_Assistant.Application.Builders
             {
                 Areas = _areas,
                 Platform = _platform,
-                RepositoryOwner = _owner,
+                RepositoryOwner = _repoOwner,
                 RepositoryName = _repoName,
                 PullRequestId = _pullRequestId,
                 RequiresTwoFactorAuth = _twoFactor,

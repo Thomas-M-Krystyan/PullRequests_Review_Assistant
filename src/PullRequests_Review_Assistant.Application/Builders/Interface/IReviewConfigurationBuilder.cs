@@ -28,8 +28,8 @@ namespace PullRequests_Review_Assistant.Application.Builders.Interface
         /// </summary>
         /// 
         /// <param name="repositoryOwner">The repository owner's name.</param>
-        /// <param name="name">The repository name.</param>
-        public IReviewConfigurationBuilder ForRepository(string repositoryOwner, string name);  // TODO: rename to "repositoryName" for clarity
+        /// <param name="repositoryName">The repository name.</param>
+        public IReviewConfigurationBuilder ForRepository(string repositoryOwner, string repositoryName);
 
         /// <summary>
         /// Sets the pull request ID.
