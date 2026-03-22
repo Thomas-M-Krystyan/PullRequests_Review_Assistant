@@ -160,7 +160,7 @@ namespace PullRequests_Review_Assistant.Application.Commands
 
                         // ReviewArea option
                         _ when reviewOption.StartsWith("--area=") => Enum.TryParse<ReviewArea>(inputParts[index]["--area=".Length..], ignoreCase: true, out var area)
-                            ? reviewBuilder.IncludeArea(area)
+                            ? _reviewBuilder.IncludeArea(area)
                             : throw new ArgumentException($"Unknown review area: '{inputParts[index]["--area=".Length..]}'.  Valid values: {string.Join(", ", Enum.GetNames<ReviewArea>())}"),
 
                         // Unrecognized option
