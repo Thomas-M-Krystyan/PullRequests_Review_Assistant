@@ -12,7 +12,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
     /// Bitbucket platform service using the MCP Bitbucket server
     /// to fetch PR files and post review comments.
     /// </summary>
-    public sealed class BitbucketPlatformService : IRepositoryPlatformService, IAsyncDisposable
+    public sealed class BitbucketPlatformService : IRepositoryPlatformService
     {
         private const string PlatformName = "Bitbucket";
         private const string UsernameEnvVar = "BITBUCKET_USERNAME";

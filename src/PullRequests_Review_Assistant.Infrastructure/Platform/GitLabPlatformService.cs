@@ -12,7 +12,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
     /// GitLab platform service using the MCP GitLab server
     /// to fetch merge request files and post review comments.
     /// </summary>
-    public sealed class GitLabPlatformService : IRepositoryPlatformService, IAsyncDisposable
+    public sealed class GitLabPlatformService : IRepositoryPlatformService
     {
         private const string PlatformName = "GitLab";
         private const string TokenEnvVar = "GITLAB_PERSONAL_ACCESS_TOKEN";

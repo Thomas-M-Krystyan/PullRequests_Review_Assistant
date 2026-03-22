@@ -12,7 +12,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
     /// GitHub platform service using the MCP GitHub server
     /// to fetch PR files and post review comments.
     /// </summary>
-    public sealed class GitHubPlatformService : IRepositoryPlatformService, IAsyncDisposable
+    public sealed class GitHubPlatformService : IRepositoryPlatformService
     {
         private const string PlatformName = "GitHub";
         private const string TokenEnvVar = "GITHUB_PERSONAL_ACCESS_TOKEN";
@@ -32,7 +32,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Platform
         {
             _authStrategy = authStrategy;
         }
-        
+
         /// <inheritdoc />
         public async Task InitializeAsync(bool requiresTwoFactor = false, CancellationToken cancellationToken = default)
         {
