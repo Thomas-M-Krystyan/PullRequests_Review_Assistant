@@ -292,6 +292,11 @@ is configured in the application.
 ```
 
 ---
+#### Review Comments on GitHub
+
+![GitHub PR Comments](images/Demo_Comment_GitHub.png)
+
+---
 
 #### Exit the Application
 
