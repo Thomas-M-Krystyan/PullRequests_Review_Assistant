@@ -54,7 +54,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Agents
         /// <inheritdoc />
         /// <exception cref="InvalidOperationException"/>
         public async Task<string> GetLanguageStandardsPromptAsync(
-            string language, CancellationToken cancellationToken = default)
+            string programmingLanguage, CancellationToken cancellationToken = default)
         {
             if (_agent is null)
             {
@@ -63,7 +63,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Agents
 
             var prompt = $"""
                           What are the most recent and recommended official coding standards 
-                          and best practices for {language}? 
+                          and best practices for {programmingLanguage}? 
                           Include the official style guide if one exists, popular community standards, 
                           naming conventions, formatting rules, idiomatic patterns, 
                           and common pitfalls to avoid.
@@ -71,7 +71,7 @@ namespace PullRequests_Review_Assistant.Infrastructure.Agents
 
             var standards = await _agent.RunAsync(prompt, cancellationToken: cancellationToken);
 
-            return SystemPromptTemplates.BuildLanguageStandardsEnrichment(language, standards.Text);
+            return SystemPromptTemplates.BuildLanguageStandardsEnrichment(programmingLanguage, standards.Text);
         }
 
         /// <inheritdoc />
