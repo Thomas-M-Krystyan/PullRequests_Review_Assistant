@@ -8,6 +8,7 @@ using PullRequests_Review_Assistant.Infrastructure.Configuration;
 using PullRequests_Review_Assistant.Infrastructure.Platform;
 using PullRequests_Review_Assistant.Infrastructure.Secrets;
 using System.Text;
+using PullRequests_Review_Assistant.Console.Utilities;
 using NetConsole = System.Console;  // There is a name conflict between System.Console and PullRequests_Review_Assistant.Console namespace
 
 namespace PullRequests_Review_Assistant.Console
@@ -36,7 +37,7 @@ namespace PullRequests_Review_Assistant.Console
             {
                 // Configuration
                 var modelConfig = new ModelConfigProvider();
-                var tier = ParseSubscriptionTier(args) ?? PromptTierType();
+                var tier = ParseSubscriptionTier(args) ?? ConsolePrompt.PromptUserSelection<SubscriptionTier>("Tier");
                 var resolvedModel = await modelConfig.ResolveModelAsync(tier, cts.Token);
 
                 // Secrets + Auth
@@ -44,7 +45,7 @@ namespace PullRequests_Review_Assistant.Console
                 var authFactory = new AuthStrategyFactory(secrets);
 
                 // Platform (user selects; the command handler picks per-review)
-                var platformType = ParsePlatformType(args) ?? PromptPlatformType();
+                var platformType = ParsePlatformType(args) ?? ConsolePrompt.PromptUserSelection<PlatformType>("Platform");
                 var authStrategy = authFactory.Create(platformType);
                 var platform = CreatePlatformService(platformType, authStrategy);
                 await platform.InitializeAsync(cancellationToken: cts.Token);
@@ -121,46 +122,6 @@ namespace PullRequests_Review_Assistant.Console
 
             return null;
         }
-        
-        /// <summary>
-        /// Prompts the user to choose a tier interactively from the list of supported options.
-        /// </summary>
-        /// 
-        /// <returns>
-        /// The <see cref="SubscriptionTier"/> selected by the user.
-        /// </returns>
-        private static SubscriptionTier PromptTierType()
-        {
-            var tiers = Enum.GetValues<SubscriptionTier>();
-
-            NetConsole.WriteLine("[Config] Select a subscription tier:");
-
-            for (var index = 0; index < tiers.Length; index++)
-            {
-                var tierNumber = index + 1;
-                var tierName = tiers[index];
-
-                NetConsole.WriteLine($"  [{tierNumber}] {tierName}");
-            }
-
-            while (true)
-            {
-                NetConsole.Write($"Enter a number (1–{tiers.Length}): ");
-
-                var input = NetConsole.ReadLine()?.Trim();
-
-                if (int.TryParse(input, out var choice) && choice >= 1 && choice <= tiers.Length)
-                {
-                    var selected = tiers[choice - 1];
-                    NetConsole.WriteLine($"[Config] Tier set to '{selected}'.");
-                    NetConsole.WriteLine();
-
-                    return selected;
-                }
-
-                NetConsole.WriteLine($"[Config] Invalid selection. Please enter a number between 1 and {tiers.Length}.");
-            }
-        }
 
         /// <summary>
         /// Attempts to resolve the platform type from a <c>--platform=</c> command-line argument.
@@ -190,46 +151,6 @@ namespace PullRequests_Review_Assistant.Console
             NetConsole.WriteLine($"[Config] Unrecognised platform '{value}'.");
 
             return null;
-        }
-
-        /// <summary>
-        /// Prompts the user to choose a platform interactively from the list of supported options.
-        /// </summary>
-        /// 
-        /// <returns>
-        /// The <see cref="PlatformType"/> selected by the user.
-        /// </returns>
-        private static PlatformType PromptPlatformType()
-        {
-            var platforms = Enum.GetValues<PlatformType>();
-
-            NetConsole.WriteLine("[Config] Select a platform:");
-
-            for (var index = 0; index < platforms.Length; index++)
-            {
-                var platformNumber = index + 1;
-                var platformName = platforms[index];
-
-                NetConsole.WriteLine($"  [{platformNumber}] {platformName}");
-            }
-
-            while (true)
-            {
-                NetConsole.Write($"Enter a number (1–{platforms.Length}): ");
-
-                var input = NetConsole.ReadLine()?.Trim();
-
-                if (int.TryParse(input, out var choice) && choice >= 1 && choice <= platforms.Length)
-                {
-                    var selected = platforms[choice - 1];
-                    NetConsole.WriteLine($"[Config] Platform set to '{selected}'.");
-                    NetConsole.WriteLine();
-
-                    return selected;
-                }
-
-                NetConsole.WriteLine($"[Config] Invalid selection. Please enter a number between 1 and {platforms.Length}.");
-            }
         }
 
         /// <summary>
