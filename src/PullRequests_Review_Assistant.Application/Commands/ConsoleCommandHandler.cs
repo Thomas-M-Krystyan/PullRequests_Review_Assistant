@@ -226,7 +226,7 @@ namespace PullRequests_Review_Assistant.Application.Commands
                               ║              PR Review Assistant — Commands                      ║
                               ╠══════════════════════════════════════════════════════════════════╣
                               ║                                                                  ║
-                              ║  review <platform> <repositoryOwner> <repo> <pr-id> [options]              ║
+                              ║  review <platform> <owner> <repo> <pr-id> [options]              ║
                               ║    Platforms: github, gitlab, bitbucket                          ║
                               ║                                                                  ║
                               ║    Core areas (always included):                                 ║
