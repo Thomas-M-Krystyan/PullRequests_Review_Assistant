@@ -131,8 +131,10 @@ namespace PullRequests_Review_Assistant.Application.Builders
             return string.IsNullOrWhiteSpace(_repoOwner)
                 ? throw new ArgumentException("Repository owner is required.")
                 : string.IsNullOrWhiteSpace(_repoName)
+
                     ? throw new ArgumentException("Repository name is required.")
                     : _pullRequestId <= 0
+
                         ? throw new ArgumentException("A valid pull request ID is required.")
                         : new ReviewConfiguration
                         {
