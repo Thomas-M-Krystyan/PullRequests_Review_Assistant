@@ -1,9 +1,9 @@
-using PullRequests_Review_Assistant.Application.Builders.Interfaces;
 using PullRequests_Review_Assistant.Application.Services;
 using PullRequests_Review_Assistant.Application.Utilities;
 using PullRequests_Review_Assistant.Domain.Enums;
 using PullRequests_Review_Assistant.Domain.Interfaces;
 using System.Text;
+using PullRequests_Review_Assistant.Application.Builders.Interface;
 
 #pragma warning disable IDE0290  // Disable warnings about using primary constructors
 

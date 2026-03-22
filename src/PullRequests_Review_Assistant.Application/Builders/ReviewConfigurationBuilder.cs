@@ -1,4 +1,4 @@
-using PullRequests_Review_Assistant.Application.Builders.Interfaces;
+using PullRequests_Review_Assistant.Application.Builders.Interface;
 using PullRequests_Review_Assistant.Domain.Enums;
 using PullRequests_Review_Assistant.Domain.ValueObjects;
 
