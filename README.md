@@ -260,7 +260,7 @@ review <Platform> <Your-GitHub-Name> <Repository-Name> <Pull-Request-Id> [option
 
 You can specify the target programming language used for core review by:
 
-- passing `--lang=<language>` command argument (e.g. `--lang=C#`) to the used for the current review
+- passing `--lang=<language>` command argument (e.g. `--lang=C#`) to be used for the current review
 - passing `language <language>` command argument (e.g. `language Python`) which will be used as a global
   agent setting for all subsequent reviews in the current session until changed again or reset
 - skip both, and let the system infer the language(s) from the PR files (based on their extensions) — this
